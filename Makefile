@@ -1,6 +1,7 @@
 OUT_DIR=output
 IN_DIR=markdown
-STYLES_DIR="."
+STYLES_DIR="templates"
+LOGS_DIR=logs
 STYLE=moderncv
 
 all: tex pdf html docx rtf
@@ -11,9 +12,9 @@ tex: init
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo $$FILE_NAME.tex; \
 		pandoc --standalone --template $(STYLES_DIR)/$(STYLE).tex \
-			--lua-filter=pandoc-filters/moderncv.lua \
+			--lua-filter=moderncv.lua \
 			--from markdown --to latex \
-			--output $(OUT_DIR)/$$FILE_NAME.tex $$f > dbg_lua.log; \
+			--output $(OUT_DIR)/$$FILE_NAME.tex $$f > $(LOGS_DIR)/dbg_lua.log; \
 	done
 
 
@@ -22,7 +23,7 @@ pdf: tex
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo cooking $$FILE_NAME.pdf; \
 		pdflatex -interaction=nonstopmode -halt-on-error \
-				 -output-directory=$(OUT_DIR) $(OUT_DIR)/$$FILE_NAME.tex >> pdflatex.log; \
+				 -output-directory=$(OUT_DIR) $(OUT_DIR)/$$FILE_NAME.tex >> $(LOGS_DIR)/pdflatex.log; \
 	done
 
 html: init
@@ -74,6 +75,7 @@ init: dir version
 
 dir:
 	mkdir -p $(OUT_DIR)
+	mkdir -p $(LOGS_DIR)
 
 version:
 	PANDOC_VERSION=`pandoc --version | head -1 | cut -d' ' -f2 | cut -d'.' -f1`; \

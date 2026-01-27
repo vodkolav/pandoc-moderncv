@@ -2,7 +2,7 @@
 -- Converts DefinitionList entries into \cventry or \cvitem* macros
 
 local function debug_log(msg)
-  local log_file = io.open("debug_log.txt", "a")
+  local log_file = io.open("logs/debug_log.txt", "a")
   log_file:write(msg .. "\n")
   log_file:close()
 end

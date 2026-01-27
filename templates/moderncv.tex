@@ -23,11 +23,17 @@
 %\usepackage{CJKutf8}                              % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean
 
 % adjust the page margins
-\usepackage[scale=0.8]{geometry}
+\usepackage[scale=0.9]{geometry}
 %\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates
 %\setlength{\makecvheadnamewidth}{10cm}            % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
 
-% personal data
+% provide a fallback for pandoc's \tightlist macro
+\providecommand{\tightlist}{}
+
+% personal data: allow injected header-includes (from Lua filter/frontmatter)
+$if(header-includes)$
+$for(header-includes)$$header-includes$$endfor$
+$else$
 \name{Johnny}{Coder}
 \title{Curriculum Vitae}                           % optional, remove / comment the line if not wanted
 \address{Parkwayt drive}{Mytown, Mycountry}             % optional, remove / comment the line if not wanted; the "postcode city" and "country" arguments can be omitted or provided empty
@@ -43,8 +49,9 @@
 % \social[gitlab]{jdoe}                              % optional, remove / comment the line if not wanted
 % \social[skype]{jdoe}                               % optional, remove / comment the line if not wanted
 % \extrainfo{additional information}                 % optional, remove / comment the line if not wanted
-\photo[64pt][0.4pt]{JohnnyC}                       % optional, remove / comment the line if not wanted; '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file
+%\photo[64pt][0.4pt]{JohnnyC}                       % optional, remove / comment the line if not wanted; '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file
 % \quote{Some quote}                                 % optional, remove / comment the line if not wanted
+$endif$
 
 % bibliography adjustements (only useful if you make citations in your resume, or print a list of publications using BibTeX)
 %   to show numerical labels in the bibliography (default is to show no labels)
