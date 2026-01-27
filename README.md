@@ -29,7 +29,19 @@ Personal information is provided in a YAML frontmatter block at the top of your 
 *   `quote`: A brief quote.
 *   `extrainfo`: Any additional information.
 
-### Example Frontmatter
+
+```
+
+### Theme Configuration
+
+You can configure the `moderncv` theme directly from the YAML frontmatter. The following fields are supported under the `theme` key:
+
+- `fontsize`: Font size for the document (default: `10pt`).
+- `moderncvstyle`: Style of the `moderncv` class (default: `classic`).
+- `moderncvcolor`: Color scheme for the `moderncv` class (default: `blue`).
+- `scale`: Scale factor for the hints column width (default: `0.8`).
+
+#### Example Frontmatter
 
 ```yaml
 ---
@@ -43,6 +55,10 @@ homepage: "www.johnnycoder.com"
 social:
   github: Johnny-Coder
   linkedin: johnny-coder
+theme:
+  moderncvstyle: banking
+  moderncvcolor: green
+  scale: 0.9
 ---
 ```
 

@@ -9,6 +9,9 @@ social:
     linkedin: Johnny-Coder
     twitter: jdoe
     github: Johnny-Coder
+theme:
+    moderncvcolor: green
+    scale: 0.8
 ---
 
 In this style, the resume starts with an "About" block, where you can briefly list your specialties, or ```include a salient quote```\

@@ -135,6 +135,34 @@ end
 
 
 
+-- Function to handle theme configurations
+local function Theme(theme)
+  local defaults = {
+    -- documentclass = "11pt,a4paper,sans",
+    moderncvstyle = "classic",
+    moderncvcolor = "blue",
+    --scale = "0.8"
+  }
+
+  if not theme then
+    theme = defaults
+  end
+
+  -- local result = {}
+  for key, val in pairs(theme) do
+    defaults[key] = val and pandoc.utils.stringify(theme[key]) 
+  end
+
+  local theme_blocks = {
+    string.format("\\moderncvstyle{%s}", defaults.moderncvstyle),
+    string.format("\\moderncvcolor{%s}", defaults.moderncvcolor),
+    -- string.format("\\documentclass[%s]{moderncv}", defaults.documentclass),
+    --string.format("\\setlength{\\hintscolumnwidth}{%s\\textwidth}", result.scale)
+  }
+
+  return theme_blocks
+end
+
 function Meta(meta)
   local blocks = {}
 
@@ -159,6 +187,15 @@ function Meta(meta)
     end
     return parts
   end
+
+    -- Process theme configurations
+  -- if meta.theme then
+    local theme_blocks = Theme(meta.theme)
+    for _, block in ipairs(theme_blocks) do
+      table.insert(blocks, pandoc.RawBlock('latex', block))
+    end
+  -- end
+
 
   -- name: prefer explicit firstname/lastname, else split `name` or `author`
   local firstname = mstr('firstname')
@@ -238,6 +275,7 @@ function Meta(meta)
       end
     end
   end
+
 
   -- append to header-includes (create or extend)
   local hi = meta['header-includes'] or {}
