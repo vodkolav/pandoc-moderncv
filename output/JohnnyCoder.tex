@@ -1,0 +1,152 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2015 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+
+\documentclass[11pt,a4paper,sans]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+\usepackage{comment}
+% \usepackage{expl3}
+% \expandafter\def\csname ver@l3regex.sty\endcsname{} 
+
+% moderncv themes
+\moderncvstyle{classic}                             % style options are 'casual' (default), 'classic', 'banking', 'oldstyle' and 'fancy'
+\moderncvcolor{blue}                               % color options 'black', 'blue' (default), 'burgundy', 'green', 'grey', 'orange', 'purple' and 'red'
+%\renewcommand{\familydefault}{\sfdefault}         % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+%\nopagenumbers{}                                  % uncomment to suppress automatic page numbering for CVs longer than one page
+
+% character encoding
+%\usepackage[utf8]{inputenc}                       % if you are not using xelatex ou lualatex, replace by the encoding you are using
+%\usepackage{CJKutf8}                              % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean
+
+% adjust the page margins
+\usepackage[scale=0.9]{geometry}
+%\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates
+%\setlength{\makecvheadnamewidth}{10cm}            % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
+
+% provide a fallback for pandoc's \tightlist macro
+\providecommand{\tightlist}{}
+
+% personal data: allow injected header-includes (from Lua filter/frontmatter)
+\name{Johnny}{Coder}
+
+\title{Awesomeness Manager}
+
+\address{Mytown}{Mycountry}{}
+
+\phone[mobile]{+00 (0)12 345 6789}
+
+\email{email@example.com}
+
+\homepage{www.johndoe.com}
+
+\social[twitter]{jdoe}
+
+\social[github]{Johnny-Coder}
+
+\social[linkedin]{Johnny-Coder}
+
+% bibliography adjustements (only useful if you make citations in your resume, or print a list of publications using BibTeX)
+%   to show numerical labels in the bibliography (default is to show no labels)
+%\makeatletter\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}\makeatother
+\renewcommand*{\bibliographyitemlabel}{[\arabic{enumiv}]}
+%   to redefine the bibliography heading string ("Publications")
+%\renewcommand{\refname}{Articles}
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+%\newcites{book,misc}{{Books},{Others}}
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%\begin{CJK*}{UTF8}{gbsn}                          % to typeset your resume in Chinese using CJK
+%-----       resume       ---------------------------------------------------------
+\makecvtitle
+
+In this style, the resume starts with an ``About'' block, where you can
+briefly list your specialties, or \texttt{include\ a\ salient\ quote}\\
+Ending a line with a backslash forces a line break.
+
+\section{Education}\label{education}
+
+\cventry{2010-2014 (expected)}{\textbf{PhD, Computer Science}}{Awesome University}{MyTown}{}{Thesis title: Deep Learning Approaches to the Self-Awesomeness
+Estimation Problem}
+
+\cventry{2007-2010}{BSc, Computer Science and Electrical Engineering}{University of HomeTown}{HomeTown}{}{\begin{itemize}
+\item
+  Minor: Awesomeology
+\item
+  Major: Awesome Science
+\end{itemize}}
+
+\section{Experience}\label{experience}
+
+\cventry{2010-2017}{Awesomeness manager}{awesomia}{moon}{}{Short text containing the type of work done, results obtained, lessons
+learned and other insightful remarks.\\
+Here too, ending a line with a backslash forces a line break. List items
+do a line break by definition. But regular consecutive paragraphs get
+concatenated into one unless backslash is used.
+Can also include lists and links:
+\begin{itemize}
+\item
+  First item
+\item
+  Item with \href{http://www.example.com}{link}. Links will work both in
+  the html and pdf versions.
+\end{itemize}}
+
+\cventry{2017-2020}{\textbf{That Other Job You Had}}{at company}{Saturn}{}{Also with a short description.\\
+And more description}
+
+\section{Personal projects}\label{personal-projects}
+
+\cventry{Awesomizer}{\href{https://github.com/githubuser/superlongprojectname}{github.com/githubuser/superlongprojectname}}{\href{https://en.wikipedia.org/wiki/LOLCODE}{LOLCODE}}{}{}{For items which don't have a clear time ordering, a definition list can
+be used to have named items.
+\begin{itemize}
+\item
+  These items can also contain lists
+  \begin{itemize}
+  \item
+    And nested lists
+    \begin{itemize}
+    \tightlist
+    \item
+      But you need to mind the indentation levels in the markdown
+      source.
+    \end{itemize}
+  \end{itemize}
+\item
+  Second item.
+\end{itemize}}
+
+\cventry{\textbf{Linux Kernel}}{\url{kernel.org}}{JavaScript}{}{}{implemented multithreading over a long weekend}
+
+\cvdoubleitem{\href{http://nodejs.org}{\textbf{node.js}}}{which was actually totally my idea.}{\textbf{COBOL}}{I invented it}
+
+\cvitem{Special relativity}{derived the famous equation \(E=mc^2\) in my spare time}
+
+You can use a \texttt{\textbackslash{}newpage} directive to force a new
+page.
+
+\newpage
+
+\section{Skills}\label{skills}
+
+\cvitem{Basic knowledge}{\textbf{C} , x86 assembly, \textbf{forth}, Common Lisp}
+
+\cvitem{Advanced knowledge}{Lua , \textbf{Pandoc}, \LaTeX{}}
+
+\section{Languages}\label{languages}
+
+\cvitem{Klingon}{native speaker}
+
+\cvitem{English}{so-so}
+
+\end{document}
+
+
+%% end of file `template.tex'.
