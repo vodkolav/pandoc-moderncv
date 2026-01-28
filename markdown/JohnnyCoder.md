@@ -10,8 +10,13 @@ social:
     twitter: jdoe
     github: Johnny-Coder
 theme:
+    documentclass: 
+        fontsize: 14pt
+        papersize: a4paper
+        fontfamily: sans
+    moderncvstyle: banking
     moderncvcolor: green
-    scale: 0.8
+    scale: 0.93
 ---
 
 In this style, the resume starts with an "About" block, where you can briefly list your specialties, or ```include a salient quote```\

@@ -6,18 +6,14 @@
 % available at http://www.latex-project.org/lppl/.
 
 
-\documentclass[11pt,a4paper,sans]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
-
-\usepackage{comment}
-\usepackage[scale=0.9]{geometry}
-% provide a fallback for pandoc's \tightlist macro
-\providecommand{\tightlist}{}
-
 % allow injected header-includes (from Lua filter/frontmatter)
 $if(header-includes)$
 $for(header-includes)$$header-includes$$endfor$
 $else$
-      % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+\documentclass[11pt,a4paper,sans]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+\usepackage[scale=0.9]{geometry}
 
 % \usepackage{expl3}
 % \expandafter\def\csname ver@l3regex.sty\endcsname{} 
@@ -56,6 +52,10 @@ $else$
 %\photo[64pt][0.4pt]{JohnnyC}                       % optional, remove / comment the line if not wanted; '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file
 % \quote{Some quote}                                 % optional, remove / comment the line if not wanted
 $endif$
+
+\usepackage{comment}
+% provide a fallback for pandoc's \tightlist macro
+\providecommand{\tightlist}{}
 
 % bibliography adjustements (only useful if you make citations in your resume, or print a list of publications using BibTeX)
 %   to show numerical labels in the bibliography (default is to show no labels)

@@ -13,6 +13,21 @@ end
 
 local stringify = (require 'pandoc.utils').stringify
 
+local function repr(obj)
+  if type(obj) == "table" then
+    local s = type(obj) .. ": { "
+    for k, v in pairs(obj) do
+      local key = type(k) == "string" and '"' .. k .. '"' or k
+      s = s .. "[" .. key .. "] = " .. repr(v) .. ", "
+    end
+    return s .. "}"
+  elseif type(obj) == "string" then
+    return type(obj) .. ': "' .. obj .. '"'
+  else
+    return type(obj) .. ': ' .. tostring(obj)
+  end
+end
+
 local function escape_tex(s)
   if not s then return '' end  -- Handle nil values
   s = s:gsub('\\', '\\textbackslash{}')
@@ -57,6 +72,7 @@ end
 
 
 function DefinitionList(el)
+  debug_log("hello")
   local out = {}
   for _, item in ipairs(el.c or {}) do
     local term, definitions = item[1], item[2]
@@ -70,18 +86,18 @@ function DefinitionList(el)
       local first_def = definitions[1]
       local fields, description_blocks = {}, {}
       
-      debug_log("item1: " .. stringify(item[1])) -- .. " el.t:" .. stringify(definitions))
-      debug_log("item2: " .. stringify(item[2])) -- .. " el.t:" .. stringify(definitions))
-      debug_log("first_def: " .. stringify(first_def)) -- .. " el.t:" .. stringify(definitions))
-      debug_log("first_def[1]: " .. stringify(first_def[1])) -- .. " el.t:" .. stringify(definitions))
+      -- debug_log("item1: " .. stringify(item[1])) -- .. " el.t:" .. stringify(definitions))
+      -- debug_log("item2: " .. stringify(item[2])) -- .. " el.t:" .. stringify(definitions))
+      -- debug_log("first_def: " .. stringify(first_def)) -- .. " el.t:" .. stringify(definitions))
+      -- debug_log("first_def[1]: " .. stringify(first_def[1])) -- .. " el.t:" .. stringify(definitions))
       fields = split_inlines_by_sep(first_def[1].c)
       
       if first_def[2] then  --and first_def[2].t == 'Para' then
         
         desc =  {table.unpack(first_def, 2)} -- from second element to end 
         -- Split the first paragraph into fields using the separator
-        debug_log("first_def[2]: " .. stringify(first_def[2])) -- .. " el.t:" .. stringify(definitions))
-        debug_log("first_def[2].t: " .. stringify(first_def[2].t)) -- .. " el.t:" .. stringify(definitions))
+        -- debug_log("first_def[2]: " .. stringify(first_def[2])) -- .. " el.t:" .. stringify(definitions))
+        -- debug_log("first_def[2].t: " .. stringify(first_def[2].t)) -- .. " el.t:" .. stringify(definitions))
 
         -- If there are block elements, produce \cventry
         local desc = pandoc.write(pandoc.Pandoc(desc), 'latex')
@@ -134,31 +150,69 @@ function DefinitionList(el)
 end
 
 
+function DocumClass(dc)
+  -- debug_log("meta.theme: " .. stringify(meta.theme))
+  -- debug_log("meta.theme: " .. stringify(theme))
+  -- debug_log("meta.theme.documentclass: " .. stringify(theme.documentclass))
+
+  --local documentclass = "\\documentclass[13pt,a4paper,sans]{moderncv}" -- Default
+
+  -- local dc = theme.documentclass
+  -- local font_size = dc.fontsize or "12pt"
+  -- local paper_size = dc.papersize or "a4paper"
+  -- local font_family = dc.fontfamily or "sans"
+  local options = string.format("%s,%s,%s", dc["fontsize"], dc.papersize, dc.fontfamily)
+  debug_log("dc: " .. repr(dc))
+  --debug_log("dc.fontsize: " .. stringify(dc.fontsize))
+  
+
+  return options
+end
+
 
 -- Function to handle theme configurations
-local function Theme(theme)
+local function Theme(meta)
   local defaults = {
-    -- documentclass = "11pt,a4paper,sans",
+    documentclass = {
+      fontsize = "11pt",
+      papersize = "a4paper",
+      fontfamily = "sans"
+    },
     moderncvstyle = "classic",
     moderncvcolor = "blue",
-    --scale = "0.8"
+    scale = "0.8"
   }
 
-  if not theme then
+
+  if meta.theme then
+    theme = meta.theme
+    
+    -- debug_log("documentclass: " .. stringify(documentclass))
+    
+    -- TODO: this will produce incomplete documentclass definition
+    --       if some of the children of theme.documentclass are not set.
+    --       Need to override default values recursively, in a dict.update style.
+    for key, val in pairs(theme) do
+      defaults[key] = val -- and pandoc.utils.stringify(val)
+    end
+    debug_log("meta.theme: " .. repr(defaults))
+    
+  else
     theme = defaults
+    debug_log("default meta.theme: " .. repr(defaults))
   end
-
-  -- local result = {}
-  for key, val in pairs(theme) do
-    defaults[key] = val and pandoc.utils.stringify(theme[key]) 
-  end
-
+  
+  debug_log("defaults: " .. repr(defaults))
+  local dc_opts = DocumClass(defaults.documentclass)
+  debug_log("dc_opts: " .. stringify(dc_opts))
+  
   local theme_blocks = {
+    string.format("\\documentclass[%s]{moderncv}", dc_opts) ,
     string.format("\\moderncvstyle{%s}", defaults.moderncvstyle),
     string.format("\\moderncvcolor{%s}", defaults.moderncvcolor),
-    -- string.format("\\documentclass[%s]{moderncv}", defaults.documentclass),
-    --string.format("\\setlength{\\hintscolumnwidth}{%s\\textwidth}", result.scale)
+    string.format("\\usepackage[scale=%s]{geometry}", defaults.scale)
   }
+  debug_log("theme_blocks: " .. stringify(theme_blocks))
 
   return theme_blocks
 end
@@ -190,7 +244,12 @@ function Meta(meta)
 
     -- Process theme configurations
   -- if meta.theme then
-    local theme_blocks = Theme(meta.theme)
+
+  debug_log("meta: " .. stringify(meta))
+  -- debug_log("meta.theme: " .. stringify(meta.theme))
+
+
+    local theme_blocks = Theme(meta)
     for _, block in ipairs(theme_blocks) do
       table.insert(blocks, pandoc.RawBlock('latex', block))
     end

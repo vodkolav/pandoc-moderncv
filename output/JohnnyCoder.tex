@@ -5,16 +5,15 @@
 % conditions of the LaTeX Project Public License version 1.3c,
 % available at http://www.latex-project.org/lppl/.
 
-\documentclass[11pt,a4paper,sans]{moderncv}  
-\usepackage{comment}
-\usepackage[scale=0.9]{geometry}
-% provide a fallback for pandoc's \tightlist macro
-\providecommand{\tightlist}{}
 
 % allow injected header-includes (from Lua filter/frontmatter)
-\moderncvstyle{classic}
+\documentclass[[Str "14pt"],[Str "a4paper"],[Str "sans"]]{moderncv}
 
-\moderncvcolor{green}
+\moderncvstyle{[Str "banking"]}
+
+\moderncvcolor{[Str "green"]}
+
+\usepackage[scale=[Str "0.93"]]{geometry}
 
 \name{Johnny}{Coder}
 
@@ -28,15 +27,15 @@
 
 \homepage{www.johndoe.com}
 
-\social[github]{Johnny-Coder}
-
 \social[linkedin]{Johnny-Coder}
+
+\social[github]{Johnny-Coder}
 
 \social[twitter]{jdoe}
 
-
-
-
+\usepackage{comment}
+% provide a fallback for pandoc's \tightlist macro
+\providecommand{\tightlist}{}
 
 % bibliography adjustements (only useful if you make citations in your resume, or print a list of publications using BibTeX)
 %   to show numerical labels in the bibliography (default is to show no labels)
