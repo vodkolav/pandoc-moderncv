@@ -170,50 +170,65 @@ function DocumClass(dc)
 end
 
 
+-- Function to recursively merge user config with defaults
+local function merge_defaults(defaults, user_config)
+  --debug_log("user_config: " .. repr(user_config))
+  --debug_log("defaults: " .. repr(defaults))
+  if type(user_config) ~= "table" then
+    return user_config or defaults
+  end
+
+  local merged = {}
+  for key, default_value in pairs(defaults) do
+    merged[key] = merge_defaults(default_value, user_config[key])
+  end
+  --debug_log("merged: " .. repr(merged))
+
+  for key, user_value in pairs(user_config) do
+    -- if merged[key] == nil then
+      merged[key] = user_value
+    -- end
+  end
+
+  return merged
+end
+
+
+-- Function to load default theme configuration as a Pandoc AST
+local function load_default_theme()
+  local file = io.open("templates/default-theme.md", "r")
+  if not file then
+    error("Default theme configuration file not found!")
+  end
+  local content = file:read("*all")
+  file:close()
+
+  -- Parse the YAML content into a Pandoc AST
+  local parsed = pandoc.read(content, "markdown").meta
+  --debug_log("parsed: " .. repr(parsed))
+  return parsed.theme
+end
+
+
 -- Function to handle theme configurations
 local function Theme(meta)
-  local defaults = {
-    documentclass = {
-      fontsize = "11pt",
-      papersize = "a4paper",
-      fontfamily = "sans"
-    },
-    moderncvstyle = "classic",
-    moderncvcolor = "blue",
-    scale = "0.8"
-  }
+  -- Load default theme configuration
+  local defaults = load_default_theme()
+  --debug_log("defaults_loaded: " .. repr(defaults))
 
-
-  if meta.theme then
-    theme = meta.theme
-    
-    -- debug_log("documentclass: " .. stringify(documentclass))
-    
-    -- TODO: this will produce incomplete documentclass definition
-    --       if some of the children of theme.documentclass are not set.
-    --       Need to override default values recursively, in a dict.update style.
-    for key, val in pairs(theme) do
-      defaults[key] = val -- and pandoc.utils.stringify(val)
-    end
-    debug_log("meta.theme: " .. repr(defaults))
-    
-  else
-    theme = defaults
-    debug_log("default meta.theme: " .. repr(defaults))
-  end
-  
-  debug_log("defaults: " .. repr(defaults))
-  local dc_opts = DocumClass(defaults.documentclass)
-  debug_log("dc_opts: " .. stringify(dc_opts))
-  
+  -- Merge user-provided theme with defaults
+  local user_theme = meta.theme or {}
+  local theme = merge_defaults(defaults, user_theme)
+  --debug_log("merged_theme: " .. repr(theme))
   local theme_blocks = {
-    string.format("\\documentclass[%s]{moderncv}", dc_opts) ,
-    string.format("\\moderncvstyle{%s}", defaults.moderncvstyle),
-    string.format("\\moderncvcolor{%s}", defaults.moderncvcolor),
-    string.format("\\usepackage[scale=%s]{geometry}", defaults.scale)
+    string.format("\\documentclass[%s,%s,%s]{moderncv}",
+      stringify(theme.fontsize), stringify(theme.papersize), stringify(theme.fontfamily)
+    ),
+    string.format("\\moderncvstyle{%s}", stringify(theme.moderncvstyle)),
+    string.format("\\moderncvcolor{%s}", stringify(theme.moderncvcolor)),
+    string.format("\\usepackage[scale=%s]{geometry}", stringify(theme.scale))
   }
-  debug_log("theme_blocks: " .. stringify(theme_blocks))
-
+  
   return theme_blocks
 end
 

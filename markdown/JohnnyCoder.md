@@ -10,12 +10,11 @@ social:
     twitter: jdoe
     github: Johnny-Coder
 theme:
-    documentclass: 
-        fontsize: 14pt
-        papersize: a4paper
-        fontfamily: sans
-    moderncvstyle: banking
-    moderncvcolor: green
+    fontsize: 12pt
+    papersize: a4paper
+    fontfamily: sans
+    moderncvstyle: oldstyle
+    moderncvcolor: purple
     scale: 0.93
 ---
 
