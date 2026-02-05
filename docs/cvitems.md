@@ -1,41 +1,22 @@
 
-# CV items specification
 
-This is part of specification for implementation of various types of CV items in the pandoc-moderncv filter. It is a work in progress, and is subject to change.
 
-The main idea is to use Markdown definition lists to represent CV items. In general, Definition lists look like this:
 
-```markdown
-Term 1
-: definition 1
-: definition 2
+# Compact Entries (`\cvitem` family)
 
-Term 2
-: definition 3
-: definition 4
-```
+If
+1. Definitions have no body of block elements (paragraph, code block, list, etc.)
+2. A DefList can have any number of definitions.
 
-Definition lists are a good fit for CV items, as they consist of a Term (item title) and one or more definitions (item content/description).
+Then it's mapped to one of the `\cvitem` family of macros.
 
-A modified DefList syntax is proposed here, where both Term and definitions can be composite, i.e. can be split into multiple fields by a separator (the pipe character '|'). This allows to represent more complex CV items with multiple fields, such as job title, employer, location, dates etc.
-
-The type of CV item is determined by the structure of the Definition list: number of definitions per Term and number of fields per Term and definition.
-
-The general structure of a DefList item is as follows:
-
-```markdown 
-Term field 1 | Term field 2 | ...
-: definition 1 field 1 | definition 1 field 2 | ...
-: definition 2 field 1 | definition 2 field 2 | ...
-```
-
-Following are the various types of CV items supported, along with their mapping from Markdown to LaTeX.
+The rules that determine the exact macro, along with their mapping from Markdown to LaTeX, are as follows:
 
 # Simple items
-DefList with one definition per Term.
+DefList with one definition per Term and a single field in Term (e.g. no separators in Term)
 
 ## cvitem
-If the DefList has one definition per Term and no separators in Term and definition, then it maps to `\cvitem`.
+If the DefList has one definition per Term and one field in definition (e.g. no separators in definition), then it maps to `\cvitem`.
 
 ```markdown
 # Interests (cvitem)
