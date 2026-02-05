@@ -3,7 +3,7 @@
 
 This is part of specification for implementation of various types of CV items in the pandoc-moderncv filter. It is a work in progress, and is subject to change.
 
-The main idea is to use Markdown definition lists (DefList further below) to represent CV items. In general , DefLists look like this:
+The main idea is to use Markdown definition lists to represent CV items. In general, Definition lists look like this:
 
 ```markdown
 Term 1
@@ -14,11 +14,12 @@ Term 2
 : definition 3
 : definition 4
 ```
+
 Definition lists are a good fit for CV items, as they consist of a Term (item title) and one or more definitions (item content/description).
 
 A modified DefList syntax is proposed here, where both Term and definitions can be composite, i.e. can be split into multiple fields by a separator (the pipe character '|'). This allows to represent more complex CV items with multiple fields, such as job title, employer, location, dates etc.
 
-The type of CV item is determined by the structure of the definition list: number of definitions per Term, and number of fields per Term and definition.
+The type of CV item is determined by the structure of the Definition list: number of definitions per Term and number of fields per Term and definition.
 
 The general structure of a DefList item is as follows:
 
@@ -85,63 +86,11 @@ maps to
 \cvitemwithcomment{Language 4}{Skill level}{Comment} 
 ```
 
-# Complex items 
-DefList with multiple definitions per Term.
+# Complex items (previously Alternative implementation)
 
-## cvdoubleitem / cvtripleitem
-If a DefList has multiple definitions for each Term, but no more than two fields in each definition, they get mapped to `\cvdoubleitem` or `\cvtripleitem` - according to the number of definitions, but no more than 3, otherwise an error is raised.  
-The Term (line1, line2,... below) of each definition is omitted, only the definitions' contents are used. 
-Double and triple items may be mixed in the same section, but is unadvised for readability.
-
-```markdown
-# Computer skills (cvdoubleitem)
-
-line1
-: category 1 | XXX, YYY, ZZZ
-: category 4 | XXX, YYY, ZZZ
-
-line2
-: category 2 | XXX, YYY, ZZZ
-: category 5 | XXX, YYY, ZZZ
-
-line3 (cvtripleitem)
-: category 7 | XYZ
-: category 8 | XYZ
-: category 9 | XYZ
-
-line4
-: category 3 | XXX, YYY, ZZZ
-: category 6 | XXX, YYY, ZZZ
-```
-maps to 
-
-```latex
-\cvdoubleitem{category 1}{XXX, YYY, ZZZ}{category 4}{XXX, YYY, ZZZ}
-\cvdoubleitem{category 2}{XXX, YYY, ZZZ}{category 5}{XXX, YYY, ZZZ}
-\cvtripleitem{category 7}{XYZ}{category 8}{XYZ}{category 9}{XYZ} 
-\cvdoubleitem{category 3}{XXX, YYY, ZZZ}{category 6}{XXX, YYY, ZZZ}
-```
-
-## cvcolumns
-
-If a DefList has multiple definitions for each term (same as above: either 2 or 3, no more), but more (unlike above) than two fields in any of the definitions, then the DefList is mapped to `\cvcolumns`, with each definition being a column, first field being the category and the rest being an itemize list within that column. Term is omitted as well.
-
-```markdown
-# References (cvcolumns)
-
-Table
-: Category 1 | Person 1 | Person 2 | Person 3
-: Category 2 | Person 42 | Person 0.37 | (more upon request)
-: All the rest \& some more | That person, and those also (all available upon request)
-```
-
-# Complex items - Alternative implementation
-
-Alternatively, Complex items may be defined as:  
-A DefList with composite Term: one that can also be split into fields by the same separator.  
-In such case, the number of Term fields and number of definitions must match (and no more than 3?), otherwise an error is raised.
-
-> (or maybe some other item type/family can be defined - to be considered later. In such case, both composite Term and multiple definitions - serve as indications for using complex item, which might be redundant). 
+Complex items are defined as:  
+A DefList with multiple definitions and composite Term: a Term that can also be split into fields by the same separator.  
+In such case, the number of Term fields and number of definitions must match (and no more than 3?), otherwise an error is raised. [^1]
 
 ## cvdoubleitem / cv**triple**item
 
@@ -201,6 +150,8 @@ Category 1 | Category 2 | All the rest \& some more
 \end{cvcolumns}
 ```
 
+This should cover most common CV item types.
+
 
 # Features to consider implementation later
 
@@ -248,3 +199,7 @@ maps to
 \cvskill{Python}{Expert}{10}
 \cvskill{C++}{Good}{7}
 ```
+
+## Footnotes
+[^1]: (or maybe not error, but some other item type/family can be defined - to be considered later. 
+With current definition, both "composite Term" and "multiple definitions" - serve as indications for using complex item, which might be redundant). 
