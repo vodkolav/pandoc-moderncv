@@ -3,9 +3,38 @@
 
 This is part of specification for implementation of various types of CV items in the pandoc-moderncv filter. It is a work in progress, and is subject to change.
 
+The main idea is to use Markdown definition lists (DefList further below) to represent CV items. In general , DefLists look like this:
+
+```markdown
+Term 1
+: definition 1
+: definition 2
+
+Term 2
+: definition 3
+: definition 4
+```
+Definition lists are a good fit for CV items, as they consist of a Term (item title) and one or more definitions (item content/description).
+
+A modified DefList syntax is proposed here, where both Term and definitions can be composite, i.e. can be split into multiple fields by a separator (the pipe character '|'). This allows to represent more complex CV items with multiple fields, such as job title, employer, location, dates etc.
+
+The type of CV item is determined by the structure of the definition list: number of definitions per Term, and number of fields per Term and definition.
+
+The general structure of a DefList item is as follows:
+
+```markdown 
+Term field 1 | Term field 2 | ...
+: definition 1 field 1 | definition 1 field 2 | ...
+: definition 2 field 1 | definition 2 field 2 | ...
+```
+
+Following are the various types of CV items supported, along with their mapping from Markdown to LaTeX.
+
 # Simple items
+DefList with one definition per Term.
 
 ## cvitem
+If the DefList has one definition per Term and no separators in Term and definition, then it maps to `\cvitem`.
 
 ```markdown
 # Interests (cvitem)
@@ -27,6 +56,8 @@ maps to
 \cvitem{hobby 2}{Description (cvitem)}
 \cvitem{hobby 3}{Description (cvitem)}
 ```
+## cvitemwithcomment
+If the DefList has one definition per Term and 2 fields (single separator) in the definition, it maps to `\cvitemwithcomment`.
 
 ```markdown
 # Languages (cvitemwithcomment)
@@ -54,9 +85,11 @@ maps to
 \cvitemwithcomment{Language 4}{Skill level}{Comment} 
 ```
 
-# Complex items
+# Complex items 
+DefList with multiple definitions per Term.
 
-If a DefList has multiple definitions for each term, but no more than two fields in each definition, they get mapped to \cvdoubleitem or \cvtripleitem - according to the number of definitions, but no more than 3, in which case an error is raised. 
+## cvdoubleitem / cvtripleitem
+If a DefList has multiple definitions for each Term, but no more than two fields in each definition, they get mapped to `\cvdoubleitem` or `\cvtripleitem` - according to the number of definitions, but no more than 3, otherwise an error is raised.  
 The Term (line1, line2,... below) of each definition is omitted, only the definitions' contents are used. 
 Double and triple items may be mixed in the same section, but is unadvised for readability.
 
@@ -89,7 +122,9 @@ maps to
 \cvdoubleitem{category 3}{XXX, YYY, ZZZ}{category 6}{XXX, YYY, ZZZ}
 ```
 
-If a DefList has multiple definitions for each term (as above, either 2 or 3, no more), but more (unlike above) than two fields in any of the definitions, then the DefList is mapped to `\cvcolumns`, with each definition being a column, first field being the category and the rest being an itemize list within that column. Term is omitted as well.
+## cvcolumns
+
+If a DefList has multiple definitions for each term (same as above: either 2 or 3, no more), but more (unlike above) than two fields in any of the definitions, then the DefList is mapped to `\cvcolumns`, with each definition being a column, first field being the category and the rest being an itemize list within that column. Term is omitted as well.
 
 ```markdown
 # References (cvcolumns)
@@ -97,17 +132,24 @@ If a DefList has multiple definitions for each term (as above, either 2 or 3, no
 Table
 : Category 1 | Person 1 | Person 2 | Person 3
 : Category 2 | Person 42 | Person 0.37 | (more upon request)
-: [0.5]All the rest \& some more | That person, and those also (all available upon request)
+: All the rest \& some more | That person, and those also (all available upon request)
 ```
 
 # Complex items - Alternative implementation
 
-Alternatively, A sub-family 'complex items' may be defined: The Term can also be composite by splitting it into fields by "|".  
-In such case, the number of term fields and number of definitions must match (and no more than 3?), otherwise an error is raised (or maybe some other item type/family can be defined - to be considered later. In such case, both composite Term and multiple definitions - serve as indications for using complex item, which might be redundant). 
+Alternatively, Complex items may be defined as:  
+A DefList with composite Term: one that can also be split into fields by the same separator.  
+In such case, the number of Term fields and number of definitions must match (and no more than 3?), otherwise an error is raised.
+
+> (or maybe some other item type/family can be defined - to be considered later. In such case, both composite Term and multiple definitions - serve as indications for using complex item, which might be redundant). 
 
 ## cvdoubleitem / cv**triple**item
 
-If each definition has no more than one field, then DefList is mapped to `\cvdoubleitem` or `\cvtripleitem `- each Term field being an item category and each definition being the content. 
+If each definition has no more than one field, then 
+- DefList is mapped to either `\cvdoubleitem` or `\cvtripleitem `
+- according to the number of definitions, but no more than 3; otherwise an error is raised. 
+- each Term field being an item category. 
+- each definition being the item content. 
 
 ```markdown
 # Computer skills (cvdoubleitem)
@@ -138,7 +180,11 @@ maps to
 ```
 
 ## cvcolumns
-If any definition has more than one field, the DefList is mapped to `\cvcolumns`, with each Term field being a heading for its respective column, and each definition being a column; each definition field is an item in itemize list for that column.
+If any definition has more than one field, then:
+- the DefList is mapped to `\cvcolumns`, 
+- with each Term field being a heading for its respective column, 
+- and each definition being a column; 
+- each definition field is an item in itemize list for that column.
 
 ```markdown
 Category 1 | Category 2 | All the rest \& some more 
@@ -150,7 +196,7 @@ Category 1 | Category 2 | All the rest \& some more
 ```latex
 \begin{cvcolumns}
   \cvcolumn{Category 1}{\begin{itemize}\item Person 1\item Person 2\item Person 3\end{itemize}}
-  \cvcolumn{Category 2}{Amongst others:\begin{itemize}\item Person 1, and\item Person 2\end{itemize}(more upon request)}
+  \cvcolumn{Category 2}{\begin{itemize}\item Person 42 \item Person 0.37 \item (more upon request)\end{itemize}}
   \cvcolumn{All the rest \& some more}{\textit{That} person, and \textbf{those} also (all available upon request).}
 \end{cvcolumns}
 ```
@@ -174,4 +220,31 @@ maps to
   \cvcolumn{Category 1}{\begin{itemize}\item Person 1\item Person 2\item Person 3\end{itemize}}
   \cvcolumn{Category 2}{Amongst others:\begin{itemize}\item Person 1, and\item Person 2\end{itemize}(more upon request)}
   \cvcolumn[0.5]{All the rest \& some more}{\textit{That} person, and \textbf{those} also (all available upon request).}
-\end{cvcolumns}```
+\end{cvcolumns}
+```
+
+## cvlistitem / cvlistdoubleitem
+
+Consider using cvlistitem / cvlistdoubleitem for items within cventry instead of itemize lists. 
+
+```latex
+\cvlistitem{<item >}
+\cvlistdoubleitem{<item 1>}{ item 2>}
+```
+
+## Skill matrix 
+Consider using md tables for Skill matrix macros, smth like:
+
+```markdown
+# Skills matrix
+| Skill       | Level  | Experience (years) |
+|-------------|--------|--------------------|
+| Python      | Expert | 10                 |
+| C++         | Good   | 7                  |
+```
+maps to
+
+```latex
+\cvskill{Python}{Expert}{10}
+\cvskill{C++}{Good}{7}
+```
