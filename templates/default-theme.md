@@ -6,4 +6,5 @@ theme:
   moderncvstyle: classic
   moderncvcolor: blue
   scale: 0.8
+  hintscolumnwidth: 2cm
 ---

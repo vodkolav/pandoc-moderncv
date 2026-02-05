@@ -30,16 +30,16 @@ Personal information is provided in a YAML frontmatter block at the top of your 
 *   `extrainfo`: Any additional information.
 
 
-```
-
 ### Theme Configuration
 
 You can configure the `moderncv` theme directly from the YAML frontmatter. The following fields are supported under the `theme` key:
 
-- `fontsize`: Font size for the document (default: `10pt`).
-- `moderncvstyle`: Style of the `moderncv` class (default: `classic`).
-- `moderncvcolor`: Color scheme for the `moderncv` class (default: `blue`).
-- `scale`: Scale factor for the hints column width (default: `0.8`).
+- `fontsize`: Font size for the document (e.g., `10pt`, `11pt`, `12pt`).
+- `papersize`: Paper size for the document (e.g., `a4paper`, `letterpaper`).
+- `fontfamily`: Font family for the document (e.g., `sans`, `roman`).
+- `moderncvstyle`: Style of the `moderncv` class (e.g., `classic`, `banking`, `casual`).
+- `moderncvcolor`: Color scheme for the `moderncv` class (e.g., `blue`, `green`, `red`).
+- `scale`: Scale factor for the hints column width (e.g., `0.8`, `0.93`).
 
 #### Example Frontmatter
 
@@ -56,9 +56,12 @@ social:
   github: Johnny-Coder
   linkedin: johnny-coder
 theme:
+  fontsize: 12pt
+  papersize: a4paper
+  fontfamily: sans
   moderncvstyle: banking
   moderncvcolor: green
-  scale: 0.9
+  scale: 0.93
 ---
 ```
 

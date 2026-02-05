@@ -70,6 +70,17 @@ function preserve(field)
 end
 
 
+function  Inline(inl)
+  -- debug_log("Inline found")
+  if inl.t == 'LineBreak' then
+    debug_log("LineBreak found")
+    return pandoc.RawInline('latex', '\\newline ')
+    --- return pandoc.Str(escape_tex(inl.text))
+  else
+    return inl
+  end
+end
+
 
 function DefinitionList(el)
   debug_log("hello")
@@ -79,9 +90,11 @@ function DefinitionList(el)
     local term_tex = preserve(term or {})
 
     if #definitions == 0 then
+      -- Should never happen, as DefinitionList always has at least one definition.
+      -- should repurpose this case for bare itemize ( without definitionlist)
       -- No definitions, produce \cvitem with an empty description
       debug_log("No definitions for item: " .. stringify(item))
-      table.insert(out, pandoc.RawBlock('latex', '\\cvitem{' .. term_tex .. '}{ }'))
+      table.insert(out, pandoc.RawBlock('latex', '\\cvlistitem{' .. term_tex .. '}{ }'))
     else
       local first_def = definitions[1]
       local fields, description_blocks = {}, {}
@@ -224,9 +237,12 @@ local function Theme(meta)
     string.format("\\documentclass[%s,%s,%s]{moderncv}",
       stringify(theme.fontsize), stringify(theme.papersize), stringify(theme.fontfamily)
     ),
-    string.format("\\moderncvstyle{%s}", stringify(theme.moderncvstyle)),
     string.format("\\moderncvcolor{%s}", stringify(theme.moderncvcolor)),
-    string.format("\\usepackage[scale=%s]{geometry}", stringify(theme.scale))
+    --cvcolor must be set before style, otherwise it will not be applied to the document
+    string.format("\\moderncvstyle[left,details]{%s}", stringify(theme.moderncvstyle)), 
+    string.format("\\usepackage[scale=%s]{geometry}", stringify(theme.scale)),
+    string.format("\\setlength{\\hintscolumnwidth}{%s}", stringify(theme.hintscolumnwidth))
+    -- "\\setlength{\\separatorcolumnwidth}{0.05\\textwidth}"
   }
   
   return theme_blocks
@@ -360,5 +376,7 @@ end
 
 return {
   { DefinitionList = DefinitionList,
-    Meta = Meta}
+    Meta = Meta,
+    Inline = Inline
+    }
 }

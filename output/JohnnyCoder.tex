@@ -9,11 +9,13 @@
 % allow injected header-includes (from Lua filter/frontmatter)
 \documentclass[12pt,a4paper,sans]{moderncv}
 
-\moderncvstyle{oldstyle}
-
 \moderncvcolor{purple}
 
-\usepackage[scale=0.93]{geometry}
+\moderncvstyle[left,details]{classic}
+
+\usepackage[scale=0.9]{geometry}
+
+\setlength{\hintscolumnwidth}{2cm}
 
 \name{Johnny}{Coder}
 
@@ -27,13 +29,17 @@
 
 \homepage{www.johndoe.com}
 
-\social[github]{Johnny-Coder}
-
-\social[twitter]{jdoe}
-
 \social[linkedin]{Johnny-Coder}
 
+\social[twitter]{jcoe}
+
+\social[github]{Johnny-Coder}
+% \usepackage[section]{placeins}
 \usepackage{comment}
+
+% \widowpenalties 1 10000
+% \raggedbottom
+
 % provide a fallback for pandoc's \tightlist macro
 \providecommand{\tightlist}{}
 
@@ -56,8 +62,9 @@
 \makecvtitle
 
 In this style, the resume starts with an ``About'' block, where you can
-briefly list your specialties, or \texttt{include\ a\ salient\ quote}\\
-Ending a line with a backslash forces a line break.
+briefly list your specialties, or
+\texttt{include\ a\ salient\ quote}\newline Ending a line with a
+backslash forces a line break.
 
 \section{Education}\label{education}
 
@@ -74,10 +81,10 @@ Estimation Problem}
 \section{Experience}\label{experience}
 
 \cventry{2010-2017}{Awesomeness manager}{awesomia}{moon}{}{Short text containing the type of work done, results obtained, lessons
-learned and other insightful remarks.\\
-Here too, ending a line with a backslash forces a line break. List items
-do a line break by definition. But regular consecutive paragraphs get
-concatenated into one unless backslash is used.
+learned and other insightful remarks.\newline Here too, ending a line
+with a backslash forces a line break. List items do a line break by
+definition. But regular consecutive paragraphs get concatenated into one
+unless backslash is used.
 Can also include lists and links:
 \begin{itemize}
 \item
@@ -87,7 +94,7 @@ Can also include lists and links:
   the html and pdf versions.
 \end{itemize}}
 
-\cventry{2017-2020}{\textbf{That Other Job You Had}}{at company}{Saturn}{}{Also with a short description.\\
+\cventry{2017-2020}{\textbf{That Other Job You Had}}{at company}{Saturn}{}{Also with a short description.\newline 
 And more description}
 
 \section{Personal projects}\label{personal-projects}
