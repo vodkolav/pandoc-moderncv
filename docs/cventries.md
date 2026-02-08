@@ -30,7 +30,7 @@ Convert Markdown resumes into LaTeX documents conforming to the `moderncv` class
 - Testing: ensure the filter works correctly with various Markdown inputs and produces valid LaTeX output.
 - Provide a Makefile and build scripts for Windows.
 - Provide template to generate docx and other formats from Markdown, using the same frontmatter and conventions.
-- Provide templates for other LaTeX resume classes (e.g., `res`, `resume`, `curvita`).
+- Provide templates for other LaTeX resume classes (e.g., `res`, `resume`, `awesomecv`).
 - Provide a Docker image for users to easily generate PDFs from Markdown without installing dependencies.
 
 # Primary CV components
@@ -72,7 +72,7 @@ Term 2
     Block content elements for definition 4 (optional)
 ```
 
-Definition lists are a good fit for CV items, as they consist of a Term (item title) and one or more definitions (item content/description).
+Definition lists are a good fit for CV items, as they consist of a Term (item title) and one or more definitions (item content/description), which can be further described by regular blocks (paragraphs, lists, code blocks, etc.).
 
 A slightly extended version of the DefList syntax is proposed here, where both Term and definitions can be composite, i.e. can be split into multiple fields by a separator (the pipe character '|'). This allows to represent more complex CV items with multiple fields, such as job title, employer, location, dates etc.
 

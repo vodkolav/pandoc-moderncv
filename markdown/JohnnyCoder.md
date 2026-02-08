@@ -80,8 +80,9 @@ Awesomizer
 
 	implemented multithreading over a long weekend 
 
-[**node.js**](http://nodejs.org)
-: which was actually totally my idea. | **COBOL** | I invented it
+[**node.js**](http://nodejs.org) | **COBOL** 
+: which was actually totally my idea. 
+: I invented it
 
 Special relativity
 : derived the famous equation $E=mc^2$ in my spare time
@@ -100,10 +101,8 @@ Advanced knowledge
 
 # Languages
 
-Klingon
-: native speaker 
-
-English
+Klingon | English
+: native speaker
 : so-so
 
 

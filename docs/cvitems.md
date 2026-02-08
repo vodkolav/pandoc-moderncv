@@ -5,18 +5,18 @@
 # Compact Entries (`\cvitem` family)
 
 If
-1. Definitions have no body of block elements (paragraph, code block, list, etc.)
-2. A DefList can have any number of definitions.
+1. first definition has no body of block elements (paragraph, code block, list, etc.)
+
 
 Then it's mapped to one of the `\cvitem` family of macros.
 
 The rules that determine the exact macro, along with their mapping from Markdown to LaTeX, are as follows:
 
 # Simple items
-DefList with one definition per Term and a single field in Term (e.g. no separators in Term)
+DefList with one definition and a single field in Term (e.g. no separators in Term)
 
 ## cvitem
-If the DefList has one definition per Term and one field in definition (e.g. no separators in definition), then it maps to `\cvitem`.
+A Simple item with one field in definition (e.g. no separators in definition), then it maps to `\cvitem`.
 
 ```markdown
 # Interests (cvitem)
@@ -39,7 +39,7 @@ maps to
 \cvitem{hobby 3}{Description (cvitem)}
 ```
 ## cvitemwithcomment
-If the DefList has one definition per Term and 2 fields (single separator) in the definition, it maps to `\cvitemwithcomment`.
+A Simple item with 2 fields (single separator) in the definition, maps to `\cvitemwithcomment`.
 
 ```markdown
 # Languages (cvitemwithcomment)
@@ -67,7 +67,7 @@ maps to
 \cvitemwithcomment{Language 4}{Skill level}{Comment} 
 ```
 
-# Complex items (previously Alternative implementation)
+# Complex items 
 
 Complex items are defined as:  
 A DefList with multiple definitions and composite Term: a Term that can also be split into fields by the same separator.  
@@ -75,9 +75,9 @@ In such case, the number of Term fields and number of definitions must match (an
 
 ## cvdoubleitem / cv**triple**item
 
-If each definition has no more than one field, then 
-- DefList is mapped to either `\cvdoubleitem` or `\cvtripleitem `
-- according to the number of definitions, but no more than 3; otherwise an error is raised. 
+If all definitions have no more than one field, then 
+- DefList is mapped according to the number of definitions to either `\cvdoubleitem` for 2 definitions or `\cvtripleitem` for 3 definitions,
+- more than 3 definitions raises an error. 
 - each Term field being an item category. 
 - each definition being the item content. 
 
@@ -112,9 +112,10 @@ maps to
 ## cvcolumns
 If any definition has more than one field, then:
 - the DefList is mapped to `\cvcolumns`, 
-- with each Term field being a heading for its respective column, 
-- and each definition being a column; 
-- each definition field is an item in itemize list for that column.
+- each Term field being a heading for its respective column, 
+- each definition being a column; 
+- each definition field being an item in itemize list for that column.
+- mixed cases need no special treatment. For example, if some definitions have one field and some have more, then the ones with one field are just treated as having one item in their respective column. 
 
 ```markdown
 Category 1 | Category 2 | All the rest \& some more 
@@ -129,6 +130,60 @@ Category 1 | Category 2 | All the rest \& some more
   \cvcolumn{Category 2}{\begin{itemize}\item Person 42 \item Person 0.37 \item (more upon request)\end{itemize}}
   \cvcolumn{All the rest \& some more}{\textit{That} person, and \textbf{those} also (all available upon request).}
 \end{cvcolumns}
+```
+
+# Edge cases
+Empty definitions or terms: these should not occur in practice, as such structure will not be recognized as a valid DefList by pandoc, and thus will not be processed by the filter. However, if it does occur, it can be treated as a special case and mapped to `\cvitem` with empty parameters.
+
+# Pseudocode 
+for item type determination logic
+
+```pseudo
+#definitions = 0 
+    \\cvitem{term}{}
+
+#definitions > 0 
+    definition[1] has block content 
+        #definitions > 1
+            error.  cventry must have 1 definition.
+        #definitions = 1
+            def1.#fields < 4
+                \\cventry{...}
+            def1.#fields >= 4
+                error. cventry supports no more than 4 fields
+    definition[1] has NO block content 
+        \\cvitem family...
+
+        #definitions = 1 (also implies single Term field)
+            Simple items...
+            definition[1].#fields = 1 
+                \\cvitem{term}{def} 
+            definition[1].#fields = 2 
+                \\cvitemwithcomment{term}{def.field1}{def.field2} 
+            definition[1].#fields > 2
+                error. up to 2 fields supported. use commas
+
+        #definitions > 1 (also implies multiple Term fields)
+            Term.#fields <> #definitions
+                error. in complex items term.#fields must = #definitions
+
+            Term.#fields = #definitions
+                Complex items...
+                exists definition: definition.#fields > 1 
+                    \\cvcolumns...
+                        \\cvcol{term1}{\\itemize{def1.f1, def1.f2, def1.f3,...}}
+                        \\cvcol{term2}{\\itemize{def2.f1 }}
+                        \\cvcol{term3}{\\itemize{def3.f1, def3.f2, }}
+                        ... 
+
+                forall definitions: definition.#fields = 1 
+                    #definitions = 2 (also implies 2 Term fields)
+                        \\cvdoubleitem{term1}{def1}{term2}{def2}
+                    #definitions = 3 (also implies 3 Term fields)
+                        \\cvtripleitem{term1}{def1}{term2}{def2}{term3}{def3}
+                    #definitions > 3
+                        error. up to 3 items supported
+
 ```
 
 This should cover most common CV item types.

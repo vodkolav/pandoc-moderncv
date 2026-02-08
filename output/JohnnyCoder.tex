@@ -29,11 +29,11 @@
 
 \homepage{www.johndoe.com}
 
-\social[linkedin]{Johnny-Coder}
-
 \social[twitter]{jcoe}
 
 \social[github]{Johnny-Coder}
+
+\social[linkedin]{Johnny-Coder}
 % \usepackage[section]{placeins}
 \usepackage{comment}
 
@@ -82,9 +82,9 @@ Estimation Problem}
 
 \cventry{2010-2017}{Awesomeness manager}{awesomia}{moon}{}{Short text containing the type of work done, results obtained, lessons
 learned and other insightful remarks.\newline Here too, ending a line
-with a backslash forces a line break. List items do a line break by
-definition. But regular consecutive paragraphs get concatenated into one
-unless backslash is used.
+with a backslash forces a line break.\newline List items do a line break
+by definition.\newline But regular consecutive paragraphs get
+concatenated into one unless backslash is used.
 Can also include lists and links:
 \begin{itemize}
 \item
@@ -122,12 +122,14 @@ be used to have named items.
 
 \cvdoubleitem{\href{http://nodejs.org}{\textbf{node.js}}}{which was actually totally my idea.}{\textbf{COBOL}}{I invented it}
 
+\cvdoubleitem{\href{http://nodejs.org}{\textbf{node.js}}}{which was actually totally my idea.}{\textbf{COBOL}}{I invented it}
+
 \cvitem{Special relativity}{derived the famous equation \(E=mc^2\) in my spare time}
 
-You can use a \texttt{\textbackslash{}newpage} directive to force a new
-page.
+You can use a \texttt{\textbackslash{}filbreak} directive to to prevent
+orphaned headers.
 
-\newpage
+\filbreak
 
 \section{Skills}\label{skills}
 
@@ -137,9 +139,9 @@ page.
 
 \section{Languages}\label{languages}
 
-\cvitem{Klingon}{native speaker}
+\cvdoubleitem{Klingon}{native speaker}{English}{so-so}
 
-\cvitem{English}{so-so}
+\cvdoubleitem{Klingon}{native speaker}{English}{so-so}
 
 \end{document}
 
