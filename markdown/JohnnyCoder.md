@@ -82,7 +82,7 @@ Awesomizer
 
 [**node.js**](http://nodejs.org) | **COBOL** 
 : which was actually totally my idea. 
-: I invented it
+: Implemented a web server in COBOL as a joke, but it actually worked.
 
 Special relativity
 : derived the famous equation $E=mc^2$ in my spare time
@@ -101,8 +101,9 @@ Advanced knowledge
 
 # Languages
 
-Klingon | English
+**Klingon** | **English** | **Spanish**
 : native speaker
 : so-so
+: Por qué?
 
 

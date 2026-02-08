@@ -210,6 +210,7 @@ function DefinitionList(el)
           else
             -- Term.#fields matches #definitions - Complex Items...
 
+            local temp = {}
             for i, def in ipairs(definitions) do
               local def_fields = split_inlines_by_sep(def[1].c)
               if #def_fields > 1 then
@@ -222,28 +223,29 @@ function DefinitionList(el)
               end
 
               -- If we get here, it means none of the definitions had more than 1 field, so we can treat as \cvdoubleitem or \cvtripleitem              
+              temp = {}
               if #definitions == 2 then
                 --term_fields = split_inlines_by_sep(term[1].c)
-                
-                table.insert(out, pandoc.RawBlock('latex', string.format(
+                temp = pandoc.RawBlock('latex', string.format(
                   "\\cvdoubleitem{%s}{%s}{%s}{%s}",
                   preserve(term_fields[1]), stringify(definitions[1]),
                   preserve(term_fields[2]), stringify(definitions[2])
-                )))
+                ))
               elseif #definitions == 3 then
                 --term_fields = split_inlines_by_sep(term[1].c)
                 debug_log("item: " .. repr(item))
-                table.insert(out, pandoc.RawBlock('latex', string.format(
+                temp = pandoc.RawBlock('latex', string.format(
                   "\\cvtripleitem{%s}{%s}{%s}{%s}{%s}{%s}",
                    preserve(term_fields[1]), stringify(definitions[1]),
                    preserve(term_fields[2]), stringify(definitions[2]),
                    preserve(term_fields[3]), stringify(definitions[3])
-                )))
+                ))
               else -- #definitions > 3
                 --debug_log("definitions: " .. repr(definitions))
               error("Invalid structure: \\cvdouble and tripleitem family supports up to 3 fields.")
               end
             end
+            table.insert(out, temp)
           end
         end
       end
