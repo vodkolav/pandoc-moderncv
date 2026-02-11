@@ -186,6 +186,21 @@ for item type determination logic
 
 ```
 
+# Workarounds
+
+a fix for cases where user typed '|' next to the other word. This prevents the content within definitions/terms to be recognized as fields.
+Help user to easily fix it by replacing 'foo| bar' with 'foo | bar' (with spaces around |) in the markdown source. 
+
+```regex
+([^ +]?)\|([^ +])
+```
+
+replace pattern:
+```regex
+$1 | $2
+```
+
+
 This should cover most common CV item types.
 
 

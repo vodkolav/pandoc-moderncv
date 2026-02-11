@@ -326,8 +326,9 @@ local function Theme(meta)
   local theme = merge_defaults(defaults, user_theme)
   --debug_log("merged_theme: " .. repr(theme))
   local theme_blocks = {
-    string.format("\\documentclass[%s,%s,%s]{moderncv}",
-      stringify(theme.fontsize), stringify(theme.papersize), stringify(theme.fontfamily)
+    string.format("\\documentclass[%s,%s,%s,%s]{moderncv}",
+      stringify(theme.fontsize), stringify(theme.papersize),
+      stringify(theme.fontfamily), "colorlinks=true"
     ),
     string.format("\\moderncvcolor{%s}", stringify(theme.moderncvcolor)),
     --cvcolor must be set before style, otherwise it will not be applied to the document
