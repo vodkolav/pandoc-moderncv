@@ -1,10 +1,14 @@
 ---
+classoption:
+  - 10pt,
+  - a4paper,
+  - sans,
+  - colorlinks=true
+geometry:
+  - scale=0.8
 theme:
-  fontsize: 10pt
-  papersize: a4paper
-  fontfamily: sans
   moderncvstyle: classic
   moderncvcolor: blue
-  scale: 0.8
   hintscolumnwidth: 2cm
+  separationsymbol: "|"
 ---

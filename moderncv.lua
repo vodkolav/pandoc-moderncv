@@ -41,10 +41,11 @@ local function escape_tex(s)
   return s
 end
 
+local sep = "|"
 
 local function split_inlines_by_sep(inlines)
-  local sep = "|"
   local groups, current = {}, {}
+  --debug_log("sep in split_inlines_by_sep: " .. repr(sep))
   for b, el in ipairs(inlines) do
     if el.t == 'Str' and  el.text == sep then
       -- if type(el) == 'userdata' then
@@ -323,21 +324,23 @@ local function Theme(meta)
 
   -- Merge user-provided theme with defaults
   local user_theme = meta.theme or {}
+  --debug_log("user_theme: " .. repr(user_theme))
+
   local theme = merge_defaults(defaults, user_theme)
-  --debug_log("merged_theme: " .. repr(theme))
+  sep = stringify(theme.separationsymbol or "|")
+  debug_log("sep: " .. sep)
   local theme_blocks = {
-    string.format("\\documentclass[%s,%s,%s,%s]{moderncv}",
-      stringify(theme.fontsize), stringify(theme.papersize),
-      stringify(theme.fontfamily), "colorlinks=true"
-    ),
+    -- string.format("\\documentclass[%s,%s,%s,%s]{moderncv}",
+     --   stringify(theme.fontsize), stringify(theme.papersize),
+     --   stringify(theme.fontfamily), "colorlinks=true"
+    -- ),
     string.format("\\moderncvcolor{%s}", stringify(theme.moderncvcolor)),
     --cvcolor must be set before style, otherwise it will not be applied to the document
     string.format("\\moderncvstyle[left,details]{%s}", stringify(theme.moderncvstyle)), 
-    string.format("\\usepackage[scale=%s]{geometry}", stringify(theme.scale)),
+    --string.format("\\usepackage[scale=%s]{geometry}", stringify(theme.scale)),
     string.format("\\setlength{\\hintscolumnwidth}{%s}", stringify(theme.hintscolumnwidth))
     -- "\\setlength{\\separatorcolumnwidth}{0.05\\textwidth}"
   }
-  
   return theme_blocks
 end
 
@@ -361,7 +364,9 @@ function Meta(meta)
   local function split_comma(s)
     if not s then return {} end
     local parts = {}
-    for part in s:gmatch('[^,]+') do
+    local patt = '[^' .. sep .. ']+'
+    -- debug_log("Splitting address: " .. s .. " with pattern: " .. sep)
+    for part in s:gmatch(patt) do
       parts[#parts+1] = trim(part)
     end
     return parts

@@ -6,14 +6,14 @@
 % available at http://www.latex-project.org/lppl/.
 
 
+\documentclass[$classoption$]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+\usepackage[$geometry$]{geometry}
+
 % allow injected header-includes (from Lua filter/frontmatter)
 $if(header-includes)$
 $for(header-includes)$$header-includes$$endfor$
 $else$
 
-\documentclass[11pt,a4paper,sans]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
-
-\usepackage[scale=0.9]{geometry}
 
 % \usepackage{expl3}
 % \expandafter\def\csname ver@l3regex.sty\endcsname{} 

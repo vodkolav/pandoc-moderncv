@@ -3,19 +3,24 @@ author: Johnny Coder
 title: Awesomeness Manager
 email: email@example.com
 phone:  +00 (0)12 345 6789
-address:  Mytown, Mycountry
+address: Mytown | Mycountry
 homepage: www.johndoe.com
 social:
     linkedin: Johnny-Coder
     twitter: jcoe
     github: Johnny-Coder
+classoption:
+    - 10pt,
+    - a4paper,
+    - sans,
+    - colorlinks=true
+geometry:
+    - scale=0.9
 theme:
-    fontsize: 12pt
-    papersize: a4paper
-    fontfamily: sans
     moderncvstyle: classic
     moderncvcolor: purple
     scale: 0.9
+    separationsymbol: "|"
 ---
 
 In this style, the resume starts with an "About" block, where you can briefly list your specialties, or ```include a salient quote```\
