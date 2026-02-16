@@ -5,98 +5,184 @@ email: email@example.com
 phone:  +00 (0)12 345 6789
 address:  Mytown, Mycountry
 homepage: www.johndoe.com
+quote: "In space, no one can hear you code."
 social:
     linkedin: Johnny-Coder
     twitter: jdoe
     github: Johnny-Coder
 ---
 
-In this style, the resume starts with an "About" block, where you can briefly list your specialties, or ```include a salient quote```\
-Ending a line with a backslash forces a line break.
+Text without definition lists is rendered as regular paragraph, filling the whole width of the document. Often used in the "About" block, where you can briefly list your specialties.\
+Ending a line with a backslash forces a line break.\
+ - List items are nice. 
+ - They do a line break by definition. 
+But regular consecutive paragraphs 
+get concatenated into one unless backslash is used.
 
 
-# Education
+# Education (cventry)
+
+year–year 
+: Degree | Institution | City | Grade
+    Description. Can be one or more lines, and can include lists, links, etc. \
 
 2010-2014 (expected)
 : **PhD, Computer Science** | Awesome University | MyTown
 
     Thesis title: Deep Learning Approaches to the Self-Awesomeness Estimation Problem
-
-
-2007-2010
-: BSc, Computer Science and Electrical Engineering | University of HomeTown | HomeTown
-
     - Minor: Awesomeology
 
     - Major: Awesome Science
 
+
+# Master thesis (cvitem)
+
+title 
+: Title (cvitem)
+
+supervisors 
+: Supervisors (cvitem)
+
+description 
+: Short thesis abstract (cvitem)
+
 # Experience
 
-2010-2017
-: Awesomeness manager | awesomia | moon
+## Vocational (cventry)
+<!-- single term, single definition, 1 - 4 fields, has block content -->
 
-    Short text containing the type of work done, results obtained, lessons learned and other insightful remarks. \
-    Here too, ending a line with a backslash forces a line break. 
-    List items do a line break by definition. 
-    But regular consecutive paragraphs get concatenated into one unless backslash is used.
+year–year 
+: Job title | Employer | City
+    General description no longer than 1–2 lines.
+    Detailed achievements:
+    - Achievement 1
+    - Achievement 2 (with sub-achievements)
+        - Sub-achievement (a);
+        - Sub-achievement (b), with sub-sub-achievements (don’t do this!);
+            · Sub-sub-achievement i;
+            · Sub-sub-achievement ii;
+            · Sub-sub-achievement iii;
+        - Sub-achievement (c);
+    * Achievement 3
+    * Achievement 4
 
-    Can also include lists and links:  
+year–year 
+: Job title | Employer | City
+    Description line 1 \
+    Description line 2 \
+    Description line 3 \
 
-    - First item
+## Miscellaneous (cventry)
 
-    * Item with [link](http://www.example.com). Links will work both in the html and pdf versions.
-
-2017-2020
-: **That Other Job You Had** | at company | Saturn
-
-    Also with a short description.\
-
-    And more description
-
-# Personal projects
-
-Awesomizer
-:   [github.com/githubuser/superlongprojectname](https://github.com/githubuser/superlongprojectname) | [LOLCODE](https://en.wikipedia.org/wiki/LOLCODE)
-
-    For items which don't have a clear time ordering, a definition list can be used to have named items.
-
-    * These items can also contain lists
-
-        - And nested lists
-
-            * But you need to mind the indentation levels in the markdown source.
-
-    * Second item.
-
-**Linux Kernel**
-: [kernel.org](kernel.org) | JavaScript 
-
-    implemented multithreading over a long weekend 
-
-[**node.js**](http://nodejs.org)
-: which was actually totally my idea. | **COBOL** | I invented it
-
-Special relativity
-: derived the famous equation $E=mc^2$ in my spare time
-
-You can use a `\newpage` directive to force a new page.
-
-\newpage 
-
-# Skills
-
-Basic knowledge 
-: **C** , x86 assembly, **forth**, Common Lisp
-
-Advanced knowledge
-: Lua , **Pandoc**, \LaTeX{}
-
-# Languages
-
-Klingon
-: native speaker 
-
-English
-: so-so
+year–year 
+: Job title | Employer | City
+    Description
 
 
+# Interests (cvitem)
+<!-- single term, single definition, single field, no block content -->
+
+hobby 1 
+: Description 
+
+hobby 2 
+:Description 
+
+hobby 3 
+: Description
+
+
+# Languages (cvitemwithcomment)
+<!-- single term, single definition, 2 fields, no block content -->
+
+Language 1 
+:Skill level | Comment
+
+Language 2 
+:Skill level | Comment
+
+Language 3 
+:Skill level | Comment
+
+Language 4 
+:Skill level | Comment
+
+
+# Computer skills (cvdoubleitem ,cvtripleitem)
+<!-- 2 or 3 terms, single definition, 2 or 3 fields, no block content -->
+category left | category right
+: content left - XXX, YYY, ZZZ | content right - XXX, YYY, ZZZ
+
+category 2 | category 5 
+: XXX, YYY, ZZZ | XXX, YYY, ZZZ
+
+category left | category center | category right 
+: content left XYZ | content center XYZ | content right XYZ
+
+category 3 | category 6
+: XXX, YYY, ZZZ | XXX, YYY, ZZZ
+
+
+# Extra 1(cvlistitem)
+<!-- single term (omitted), multiple definitions, single field, no block content -->
+
+list (omitted)
+: Item 1 
+: Item 2 
+: Item 3. This item is particularly long and therefore normally spans over several lines. Did you notice the indentation when the line wraps?
+
+
+# Extra 2 (cvlistdoubleitem)
+<!-- single term (omitted), multiple definition, 2 fields, no block content -->
+
+double list (omitted)
+: Item 1 | Item 4 \
+: Item 2 | Item 5 \
+: Item 3 | Item 6. Like item 3 in the single column list before, this item is particularly long to wrap over several lines 
+
+
+# References (cvcolumns)
+<!-- single term (omitted), multiple definitions, single field in all definitions, has block content -->
+here, block content formatting is preserved.
+columns (omitted)
+: Category 1 
+    reguar block content for category 1, \
+    which can include lists, code blocks, etc.
+: Category 2 
+    - **Person 1**
+    - Person 2
+    - Person 3
+: All the rest & some more
+    That person \
+    and those also \
+    (all available upon request).
+
+
+# Skill matrix (cvskillentry, under construction)
+
+Skill matrix Alternatively, provide a skill matrix to show off your skills
+basic knowledge
+extensive project experience
+intermediate knowledge with some project experience
+deepened expert knowledge
+expert / specialist
+
+| What | Level | Skill | Years | Comment |
+|---|---|---|---|---|
+| Language:|3|Python | 2 | I’m so experienced in Python and have realised a million projects. At least.|
+| Language: | 2 | Lilypond | 14 | So much sheet music! Man, I’m the best! |
+| Language: | 3 |LATEX | 14 | Clearly I rock at LATEX |
+| OS: | 3 | Linux | 2 | I only use Archlinux btw |
+| Methods: | 4 | SCRUM | 8 | SCRUM master for 5 years |
+
+
+# References (under construction)
+[1] John Doe. Title, year.
+
+[2] John Doe. Title, year.
+
+[3] John Doe and Author 1. Title. Publisher, edition edition, year.
+
+[4] John Doe and Author 2. Title. Publisher, edition edition, year.
+
+[5] John Doe and Author 3. Title, year.
