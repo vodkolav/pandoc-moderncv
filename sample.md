@@ -107,6 +107,7 @@ Language 3
 Language 4 
 :Skill level | Comment
 
+Note: up to 2 fields supported. you can put more content in the field itself, but it will not be split into more fields.
 
 # Computer skills (cvdoubleitem ,cvtripleitem)
 <!-- 2 or 3 terms, single definition, 2 or 3 fields, no block content -->

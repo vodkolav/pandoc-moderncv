@@ -140,49 +140,80 @@ for item type determination logic
 
 ```pseudo
 #definitions = 0 
-    \\cvitem{term}{}
+    \\cvitem{term}{} --should not occur
 
 #definitions > 0 
-    definition[1] has block content 
-        #definitions > 1
-            error.  cventry must have 1 definition.
-        #definitions = 1
-            def1.#fields < 4
-                \\cventry{...}
-            def1.#fields >= 4
-                error. cventry supports no more than 4 fields
-    definition[1] has NO block content 
-        \\cvitem family...
+    definition[1] has block content  --?: or maybe at least one definition must have block content
+        Term.#fields <> 1  
+            error. complex items must have single field in term (no separators) 
 
-        #definitions = 1 (also implies single Term field)
-            Simple items...
-            definition[1].#fields = 1 
-                \\cvitem{term}{def} 
-            definition[1].#fields = 2 
-                \\cvitemwithcomment{term}{def.field1}{def.field2} 
-            definition[1].#fields > 2
-                error. up to 2 fields supported. use commas
+        Term.#fields == 1
+            #definitions = 1
+                def1.#fields < 4
+                    \\cventry{...}
+                def1.#fields >= 4
+                    error. cventry supports no more than 4 fields
 
-        #definitions > 1 (also implies multiple Term fields)
-            Term.#fields <> #definitions
-                error. in complex items term.#fields must = #definitions
+            #definitions > 1
+                --?: check if all definitions have block content? not necessary. if user wants empty column, let him have it. 
+                --?: and single field in all definitions? not necessary. all fields are concatenated together in the column heading, so if user wants to have multiple fields in some definitions, let him have it. 
+                \\cvcolumns{...
+                    \\cvcol{def1}{def1.block content}
+                    \\cvcol{def2}{def2.block content}
+                    \\cvcol{def3}{def3.block content}}
+                            ... 
 
-            Term.#fields = #definitions
-                Complex items...
-                exists definition: definition.#fields > 1 
-                    \\cvcolumns...
-                        \\cvcol{term1}{\\itemize{def1.f1, def1.f2, def1.f3,...}}
-                        \\cvcol{term2}{\\itemize{def2.f1 }}
-                        \\cvcol{term3}{\\itemize{def3.f1, def3.f2, }}
-                        ... 
+    definition[1] has NO block content  --?: or maybe all definitions must have no block content
+        --cvitem family...
 
-                forall definitions: definition.#fields = 1 
-                    #definitions = 2 (also implies 2 Term fields)
-                        \\cvdoubleitem{term1}{def1}{term2}{def2}
-                    #definitions = 3 (also implies 3 Term fields)
-                        \\cvtripleitem{term1}{def1}{term2}{def2}{term3}{def3}
-                    #definitions > 3
-                        error. up to 3 items supported
+        #definitions = 1 
+            --Simple items...
+            Term.#fields = 1
+                definition[1].#fields = 1 
+                    \\cvitem{term}{def} 
+                definition[1].#fields = 2 
+                    \\cvitemwithcomment{term}{def.field1}{def.field2} 
+                definition[1].#fields > 2
+                    error. up to 2 fields supported. 
+
+            Term.#fields = 2 
+                Term.#fields <> definition[1].#fields
+                    error. doubleitems must have same number of term fields as definitions fields.
+                Else
+                    \\cvdoubleitem{term1}{def.field1}{term2}{def.field2}
+
+            Term.#fields = 3 
+                Term.#fields <> definition[1].#fields
+                    error. tripleitems must have same number of term fields as definitions fields.
+                Else
+                    \\cvtripleitem{term1}{def.field1}{term2}{def.field2}{term3}{def.field3}
+
+            Term.#fields > 3
+                error. up to 3 items supported
+
+
+        #definitions > 1 
+            Term.#fields <> 1
+                error. list items must have single term field. 
+                --? since it's omitted we may not care about term fields at all. 
+                --? or maybe we can define proper amount of definition fields here? 
+
+            Term.#fields == 1
+                --List items...
+
+                exists definition with #fields <> definition[1].#fields
+                    error. all definitions must have same number of fields.
+
+                Else: all definitions have same #fields 
+                    definition[1].#fields == 1
+                        \\cvlistitem{def1.field1}
+                        \\cvlistitem{def2.field1}
+                        ...
+
+                    definition[1].#fields == 2
+                        \\cvlistdoubleitem{def1.field1}{def1.field2}
+                        \\cvlistdoubleitem{def2.field1}{def2.field2}
+                        ...
 
 ```
 
