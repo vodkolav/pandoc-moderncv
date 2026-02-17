@@ -1,5 +1,6 @@
 OUT_DIR=output
-IN_DIR=markdown
+IN_DIR=.
+IN_PATT=$(IN_DIR)/sample.md
 STYLES_DIR="templates"
 LOGS_DIR=logs
 STYLE=moderncv
@@ -9,7 +10,7 @@ all: tex pdf html docx rtf
 
 
 tex: init
-	for f in $(IN_DIR)/*.md; do \
+	for f in $(IN_PATT); do \
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo $$FILE_NAME.tex; \
 		pandoc --standalone --template $(STYLES_DIR)/$(STYLE).tex \
@@ -20,7 +21,7 @@ tex: init
 
 
 pdf: tex
-	for f in $(IN_DIR)/*.md; do \
+	for f in $(IN_PATT); do \
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo cooking $$FILE_NAME.pdf; \
 		$(PDFengine) -interaction=nonstopmode -halt-on-error \
@@ -28,7 +29,7 @@ pdf: tex
 	done
 
 html: init
-	for f in $(IN_DIR)/*.md; do \
+	for f in $(IN_PATT); do \
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo $$FILE_NAME.html; \
 		pandoc --standalone --include-in-header $(STYLES_DIR)/$(STYLE).css \
@@ -39,7 +40,7 @@ html: init
 	done
 
 docx: init
-	for f in $(IN_DIR)/*.md; do \
+	for f in $(IN_PATT); do \
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo $$FILE_NAME.docx; \
 		pandoc --standalone $$SMART $$f \
@@ -47,7 +48,7 @@ docx: init
 	done
 
 docx_t: init #docx with template
-	for f in $(IN_DIR)/*.md; do \
+	for f in $(IN_PATT); do \
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo $$FILE_NAME.docx; \
 		pandoc --standalone $$SMART $$f \
@@ -57,7 +58,7 @@ docx_t: init #docx with template
 	done
 
 json: tex
-	for f in $(IN_DIR)/*.md; do \
+	for f in $(IN_PATT); do \
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo $$FILE_NAME.json; \
 		pandoc --standalone $$SMART $$f \
@@ -66,7 +67,7 @@ json: tex
 	done
 
 rtf: init
-	for f in $(IN_DIR)/*.md; do \
+	for f in $(IN_PATT); do \
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo $$FILE_NAME.rtf; \
 		pandoc --standalone $$SMART $$f --output $(OUT_DIR)/$$FILE_NAME.rtf; \

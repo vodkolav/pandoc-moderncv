@@ -110,18 +110,25 @@ function make_cvcolumns(term_fields, definitions)
   --local term_fields = split_inlines_by_sep(term)
   for i, def in ipairs(definitions) do
     --debug_log("term " .. i ..  repr(term[i]))
-    local def_fields = split_inlines_by_sep(def[1].c)
-    local items = {}
-    for _, field in ipairs(def_fields) do
-      table.insert(items, string.format("\\item %s", preserve(field)))
-    end
-    table.insert(columns, string.format("\\cvcolumn{%s}{\\begin{itemize}%s\\end{itemize}}",
-                  preserve(term_fields[i] or ''), table.concat(items, ' ')))
+    local def_fields = def[1].c
+
+    local def_blocks = {table.unpack(def, 2)}
+
+    debug_log("def_block: " .. repr(def_blocks))
+
+    local desc = pandoc.write(pandoc.Pandoc(def_blocks), 'latex')
+
+    debug_log("desc: " .. repr(desc))
+
+    table.insert(columns, string.format("\\cvcolumn{%s}{%s}",
+                  preserve(def_fields or ''), 
+                  desc or ''))
+                  --  pandoc.write(pandoc.Pandoc(def_block[1]), 'latex')))
   end
 
   return pandoc.RawBlock('latex', string.format(
-                "\\begin{cvcolumns} %s \\end{cvcolumns}",
-                table.concat(columns, ' ')
+                "\\begin{cvcolumns}\n    %s \n\\end{cvcolumns}",
+                table.concat(columns, '\n    ')
               ))
 end
 
@@ -129,12 +136,13 @@ end
 
 function DefinitionList(el)
   local out = {}
-  debug_log("el:  " .. repr(el))
+  --debug_log("el:  " .. repr(el))
   for _, item in ipairs(el.c or {}) do
-    debug_log("item:  " .. repr(item))
+    --debug_log("item:  " .. repr(item))
 
     local term, definitions = item[1], item[2]
     local term_tex = preserve(term or {})
+    local term_fields = split_inlines_by_sep(term)
 
     if #definitions == 0 then
       -- No definitions, produce \cvitem with an empty description
@@ -144,55 +152,96 @@ function DefinitionList(el)
       )))
     else -- #definitions > 0 
       -- Single definition: check for \cventry or \cvitem family
-      local first_def = definitions[1]
-      local desc_blocks = {table.unpack(first_def, 2)}
-      
-      if #desc_blocks > 0 then
-        if #definitions > 1 then
-          error("Invalid structure: Multiple definitions with block content is not supported for \\cventry.")
-        end
-        local desc = pandoc.write(pandoc.Pandoc(desc_blocks), 'latex')
-        local fields = split_inlines_by_sep(first_def[1].c)
-        if #fields > 4 then
-          error("\\cventry supports a maximum of 4 fields in the definition.")
-        end
-        -- only one definition; Block content exists; no more than 4 fields - use \cventry
-        desc = desc:gsub("\n\n", "\n")
-        --TODO: try to bypass this ugly hack with smth like Plain
-        table.insert(out, pandoc.RawBlock('latex', string.format(
-          "\\cventry{%s}{%s}{%s}{%s}{%s}{%s}",
-          term_tex,
-          preserve(fields[1] or ''),
-          preserve(fields[2] or ''),
-          preserve(fields[3] or ''),
-          preserve(fields[4] or ''),
-          desc
-        )))
-      else
-        -- No block content, use \cvitem family
-        if #definitions == 1 then
+      local first_def = definitions[1]      
+      local first_def_fields = split_inlines_by_sep(first_def[1].c)
+
+      if #first_def > 1 then -- first def has block content
+
+        local first_def_blocks = {table.unpack(first_def, 2)}
+
+        if #term_fields ~= 1 then
+          error("complex items must have single field in term (no separators)") 
+
+        elseif #definitions == 1 then
+          debug_log("term: " .. repr(term))
+          debug_log("first_def: " .. repr(first_def))
+          debug_log("first_def_fields: " .. repr(first_def_fields))
+          debug_log("first_def_blocks: " .. repr(first_def_blocks))
+
+          local desc = pandoc.write(pandoc.Pandoc(first_def_blocks), 'latex')
           local fields = split_inlines_by_sep(first_def[1].c)
-          -- debug_log("fields: " .. repr(fields))
-          if fields and #fields == 0 then
-            error("Definition has no fields for \\cvitem family.")
-          elseif #fields == 1 then
-            table.insert(out, pandoc.RawBlock('latex', string.format(
-              "\\cvitem{%s}{%s}", term_tex, preserve(fields[1])
-            )))
-          elseif #fields == 2 then
-            table.insert(out, pandoc.RawBlock('latex', string.format(
-              "\\cvitemwithcomment{%s}{%s}{%s}",
-              term_tex, preserve(fields[1]), preserve(fields[2])
-            )))          
-          elseif #fields > 2 then
-            debug_log("\\cvitem family supports a maximum of 2 fields in the definition.")
-            debug_log("fields: " .. repr(fields))
-            error("\\cvitem family supports a maximum of 2 fields in the definition.")
+          if #fields > 4 then
+            error("\\cventry supports a maximum of 4 fields in the definition.")
           end
+          -- only one definition; Block content exists; no more than 4 fields - use \cventry
+          desc = desc:gsub("\n\n", "\n")
+          --TODO: try to bypass this ugly hack with smth like Plain
+          table.insert(out, pandoc.RawBlock('latex', string.format(
+            "\\cventry{%s}{%s}{%s}{%s}{%s}{%s}",
+            term_tex,
+            preserve(fields[1] or ''),
+            preserve(fields[2] or ''),
+            preserve(fields[3] or ''),
+            preserve(fields[4] or ''),
+            desc
+          )))
+        elseif #definitions > 1 then
+          cvcols = make_cvcolumns(term_fields, definitions)
+          table.insert(out, cvcols)
         end
 
+      else -- No block content, use \cvitem family
+      
+        if #definitions == 1 then
+          -- debug_log("fields: " .. repr(fields))
+          if #term_fields == 1 then
+            -- debug_log("term: " .. repr(term))
 
-        if #definitions > 1 then
+            -- debug_log("term_fields: " .. repr(term_fields))
+
+            if first_def_fields and #first_def_fields == 0 then
+              error("Definition has no fields for \\cvitem family.")
+            elseif #first_def_fields == 1 then
+              table.insert(out, pandoc.RawBlock('latex', string.format(
+                "\\cvitem{%s}{%s}", term_tex, preserve(first_def_fields[1])
+              )))
+            elseif #first_def_fields == 2 then
+              table.insert(out, pandoc.RawBlock('latex', string.format(
+                "\\cvitemwithcomment{%s}{%s}{%s}",
+                term_tex, preserve(first_def_fields[1]), preserve(first_def_fields[2])
+              )))
+            elseif #first_def_fields > 2 then
+              -- debug_log("\\cvitem family supports a maximum of 2 fields in the definition.")
+              -- debug_log("fields: " .. repr(first_def_fields))
+              error("\\cvitem family supports a maximum of 2 fields in the definition.")
+            end
+
+          elseif #term_fields > 3 then
+            error("\\cvitem family supports a maximum of 3 fields in the term.")
+
+          elseif #term_fields ~= #first_def_fields then
+            error("error. double/triple items must have same number of term fields as definitions fields.")
+
+          else -- #term_fields either 2 or 3
+            if #first_def_fields == 2 then
+                --term_fields = split_inlines_by_sep(term[1].c)
+                table.insert(out, pandoc.RawBlock('latex', string.format(
+                  "\\cvdoubleitem{%s}{%s}{%s}{%s}",
+                  preserve(term_fields[1]), stringify(first_def_fields[1]),
+                  preserve(term_fields[2]), stringify(first_def_fields[2])
+                )))
+            elseif #first_def_fields == 3 then
+              -- debug_log("item: " .. repr(item))
+              table.insert(out, pandoc.RawBlock('latex', string.format(
+                "\\cvtripleitem{%s}{%s}{%s}{%s}{%s}{%s}",
+                  preserve(term_fields[1]), stringify(first_def_fields[1]),
+                  preserve(term_fields[2]), stringify(first_def_fields[2]),
+                  preserve(term_fields[3]), stringify(first_def_fields[3])
+              )))
+            end
+          end
+
+        elseif #definitions > 1 then
           -- debug_log("item: " .. repr(item))
           -- debug_log("term: " .. repr(term))
           -- debug_log("term.c: " .. repr(term.c))
@@ -204,49 +253,41 @@ function DefinitionList(el)
           -- debug_log("term_tex: " .. repr(term_tex))
           -- debug_log("term_tex.c: " .. repr(term_tex.c))
 
-          term_fields = split_inlines_by_sep(term)
 
-          if #term_fields ~= #definitions then
-            error("Mismatch between number of term fields and definitions for multiple definitions.")
+          if #term_fields ~= 1 then
+            error("list items must have single term field. ")
           else
             -- Term.#fields matches #definitions - Complex Items...
 
             local temp = {}
             for i, def in ipairs(definitions) do
               local def_fields = split_inlines_by_sep(def[1].c)
-              if #def_fields > 1 then
-                -- Treat as \cvcolumns. iterate again on all the fields of the definition and create an itemize list for each definition
-                debug_log("item(cvcolumns): " .. repr(item))
-                
-                cvcols = make_cvcolumns(term_fields, definitions)
-                table.insert(out, cvcols)
-                break
-              end
+              -- debug_log("#def_fields: " .. repr(#def_fields))
+              -- debug_log("#first_def_fields: " .. repr(#first_def_fields))
+              if #def_fields == #first_def_fields then
+                if #def_fields == 2 then
+                  -- debug_log('were in cvlistdoubleitem')
+                  temp = pandoc.RawBlock('latex', string.format(
+                    "\\cvlistdoubleitem{%s}{%s}",
+                    preserve(def_fields[1]), preserve(def_fields[2])
+                  ))
+                else
+                  -- debug_log('were in cvlistitem')
 
-              -- If we get here, it means none of the definitions had more than 1 field, so we can treat as \cvdoubleitem or \cvtripleitem              
-              temp = {}
-              if #definitions == 2 then
-                --term_fields = split_inlines_by_sep(term[1].c)
                 temp = pandoc.RawBlock('latex', string.format(
-                  "\\cvdoubleitem{%s}{%s}{%s}{%s}",
-                  preserve(term_fields[1]), stringify(definitions[1]),
-                  preserve(term_fields[2]), stringify(definitions[2])
-                ))
-              elseif #definitions == 3 then
-                --term_fields = split_inlines_by_sep(term[1].c)
-                debug_log("item: " .. repr(item))
-                temp = pandoc.RawBlock('latex', string.format(
-                  "\\cvtripleitem{%s}{%s}{%s}{%s}{%s}{%s}",
-                   preserve(term_fields[1]), stringify(definitions[1]),
-                   preserve(term_fields[2]), stringify(definitions[2]),
-                   preserve(term_fields[3]), stringify(definitions[3])
-                ))
+                  "\\cvlistitem{%s}",
+                  preserve(def_fields[1])))
+                end
+
               else -- #definitions > 3
-                --debug_log("definitions: " .. repr(definitions))
-              error("Invalid structure: \\cvdouble and tripleitem family supports up to 3 fields.")
+                -- debug_log("definitions: " .. repr(definitions))
+                -- debug_log("term: " .. repr(term))
+                -- debug_log("def_fields: " .. repr(def_fields))
+                -- debug_log("first_def_fields: " .. repr(first_def_fields))
+                error("Invalid structure: all definitions must have same number of fields.")
               end
+              table.insert(out, temp)
             end
-            table.insert(out, temp)
           end
         end
       end
@@ -312,23 +353,16 @@ local function load_default_theme()
   -- Parse the YAML content into a Pandoc AST
   local parsed = pandoc.read(content, "markdown").meta
   --debug_log("parsed: " .. repr(parsed))
-  return parsed.theme
+  return parsed
 end
 
 
 -- Function to handle theme configurations
 local function Theme(meta)
-  -- Load default theme configuration
-  local defaults = load_default_theme()
-  --debug_log("defaults_loaded: " .. repr(defaults))
 
-  -- Merge user-provided theme with defaults
-  local user_theme = meta.theme or {}
-  --debug_log("user_theme: " .. repr(user_theme))
-
-  local theme = merge_defaults(defaults, user_theme)
+  local theme = meta.theme or {}
   sep = stringify(theme.separationsymbol or "|")
-  debug_log("sep: " .. sep)
+  debug_log("meta: " .. repr(meta))
   local theme_blocks = {
     -- string.format("\\documentclass[%s,%s,%s,%s]{moderncv}",
      --   stringify(theme.fontsize), stringify(theme.papersize),
@@ -378,13 +412,21 @@ function Meta(meta)
   debug_log("meta: " .. stringify(meta))
   -- debug_log("meta.theme: " .. stringify(meta.theme))
 
+    -- Load default theme configuration
+  local defaults = load_default_theme()
+  --debug_log("defaults_loaded: " .. repr(defaults))
 
-    local theme_blocks = Theme(meta)
-    for _, block in ipairs(theme_blocks) do
-      table.insert(blocks, pandoc.RawBlock('latex', block))
-    end
-  -- end
+  -- Merge user-provided theme with defaults
+  --local user_theme = meta.theme or {}
+  --debug_log("user_theme: " .. repr(user_theme))
 
+  meta = merge_defaults(defaults, meta)
+
+  local theme_blocks = Theme(meta)
+  for _, block in ipairs(theme_blocks) do
+    table.insert(blocks, pandoc.RawBlock('latex', block))
+  end
+-- end
 
   -- name: prefer explicit firstname/lastname, else split `name` or `author`
   local firstname = mstr('firstname')

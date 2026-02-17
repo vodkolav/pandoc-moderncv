@@ -148,7 +148,7 @@ for item type determination logic
             error. complex items must have single field in term (no separators) 
 
         Term.#fields == 1
-            #definitions = 1
+            #definitions == 1
                 def1.#fields < 4
                     \\cventry{...}
                 def1.#fields >= 4
@@ -156,7 +156,7 @@ for item type determination logic
 
             #definitions > 1
                 --?: check if all definitions have block content? not necessary. if user wants empty column, let him have it. 
-                --?: and single field in all definitions? not necessary. all fields are concatenated together in the column heading, so if user wants to have multiple fields in some definitions, let him have it. 
+                --?: check if single field in all definitions? not necessary. all fields are concatenated together in the column heading, so if user wants to have multiple fields in some definitions, let him have it. 
                 \\cvcolumns{...
                     \\cvcol{def1}{def1.block content}
                     \\cvcol{def2}{def2.block content}
@@ -175,21 +175,19 @@ for item type determination logic
                     \\cvitemwithcomment{term}{def.field1}{def.field2} 
                 definition[1].#fields > 2
                     error. up to 2 fields supported. 
-
-            Term.#fields = 2 
-                Term.#fields <> definition[1].#fields
-                    error. doubleitems must have same number of term fields as definitions fields.
-                Else
-                    \\cvdoubleitem{term1}{def.field1}{term2}{def.field2}
-
-            Term.#fields = 3 
-                Term.#fields <> definition[1].#fields
-                    error. tripleitems must have same number of term fields as definitions fields.
-                Else
-                    \\cvtripleitem{term1}{def.field1}{term2}{def.field2}{term3}{def.field3}
-
+            
             Term.#fields > 3
                 error. up to 3 items supported
+
+            Term.#fields <> definition[1].#fields
+                error. double/triple items must have same number of term fields as definitions fields.
+
+                definition[1].#fields == 2 
+                    \\cvdoubleitem{term1}{def.field1}{term2}{def.field2}
+
+                definition[1].#fields == 3 
+                    \\cvtripleitem{term1}{def.field1}{term2}{def.field2}{term3}{def.field3}
+
 
 
         #definitions > 1 
@@ -213,6 +211,7 @@ for item type determination logic
                     definition[1].#fields == 2
                         \\cvlistdoubleitem{def1.field1}{def1.field2}
                         \\cvlistdoubleitem{def2.field1}{def2.field2}
+                        \\cvlistdoubleitem{def3.field1}{def3.field2}
                         ...
 
 ```
