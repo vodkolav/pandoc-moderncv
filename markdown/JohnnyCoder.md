@@ -19,8 +19,8 @@ geometry:
 theme:
     moderncvstyle: classic
     moderncvcolor: purple
-    scale: 0.9
     separationsymbol: "|"
+    hintscolumnwidth: 2cm
 ---
 
 In this style, the resume starts with an "About" block, where you can briefly list your specialties, or ```include a salient quote```\
@@ -86,8 +86,7 @@ Awesomizer
 	implemented multithreading over a long weekend 
 
 [**node.js**](http://nodejs.org) | **COBOL** 
-: which was actually totally my idea. 
-: Implemented a web server in COBOL as a joke, but it actually worked.
+: which was actually totally my idea. | Implemented a web server in COBOL as a joke, but it actually worked.
 
 Special relativity
 : derived the famous equation $E=mc^2$ in my spare time
@@ -95,6 +94,25 @@ Special relativity
 You can use a `\filbreak` directive to to prevent orphaned headers.
 
 \filbreak 
+
+# cvlistitem
+
+List (omitted)
+: Item 1
+: Item 2
+: Item 3
+
+# cvlistdoubleitem
+
+List (omitted)
+: Item 1 | Item 4
+: Item 2 | Item 5
+: Item 3 | Item 6
+
+
+# Just paragraphs
+This is a paragraph. It will be treated as a single block of text, even if it is written as multiple lines in the markdown source. To have multiple paragraphs, you need to separate them with a blank line.
+
 
 # Skills
 
@@ -107,8 +125,6 @@ Advanced knowledge
 # Languages
 
 **Klingon** | **English** | **Spanish**
-: native speaker
-: so-so
-: Por qué?
+: native speaker | so-so | Por qué?
 
 

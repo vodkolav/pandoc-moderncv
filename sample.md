@@ -13,8 +13,9 @@ social:
 ---
 
 Text without definition lists is rendered as regular paragraph, filling the whole width of the document. Often used in the "About" block, where you can briefly list your specialties.
- - List items are nice to have here 
- - They do a line break by definition. 
+
+- List items do a line break by definition.
+- Just make sure they are separated by a blank line from the previous and next paragraphs. 
 
 But regular consecutive paragraphs (newline was here, where'd it go?)
 get concatenated into one unless backslash is used.\
@@ -56,15 +57,15 @@ description
 1647-1650 
 : Job title | Employer | City 
 
-    General description no longer than 1–2 lines.
+    General description no longer than 1–2 lines.\
     Detailed achievements:
     - Achievement 1
     - Achievement 2 (with sub-achievements)
         - Sub-achievement (a);
         - Sub-achievement (b), with sub-sub-achievements (don’t do this!);
-            · Sub-sub-achievement i;
-            · Sub-sub-achievement ii;
-            · Sub-sub-achievement iii;
+            1. Sub-sub-achievement i;
+            2. Sub-sub-achievement ii;
+            3. Sub-sub-achievement iii;
         - Sub-achievement (c);
     * Achievement 3
     * Achievement 4

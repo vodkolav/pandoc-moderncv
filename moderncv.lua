@@ -73,7 +73,8 @@ end
 
 function  Inline(inl)
   -- debug_log("Inline found")
-  if inl.t == 'LineBreak' or inl.t == 'SoftBreak' then
+  -- or inl.t == 'SoftBreak'
+  if inl.t == 'LineBreak'  then
     return pandoc.RawInline('latex', '\\newline ')
     --- return pandoc.Str(escape_tex(inl.text))
   else
@@ -255,7 +256,7 @@ function DefinitionList(el)
 
 
           if #term_fields ~= 1 then
-            error("list items must have single term field. ")
+            error("Near " .. stringify(item) .. "list items must have single term field. ")
           else
             -- Term.#fields matches #definitions - Complex Items...
 
@@ -296,25 +297,6 @@ function DefinitionList(el)
   return out
 end
 
-
-function DocumClass(dc)
-  -- debug_log("meta.theme: " .. stringify(meta.theme))
-  -- debug_log("meta.theme: " .. stringify(theme))
-  -- debug_log("meta.theme.documentclass: " .. stringify(theme.documentclass))
-
-  --local documentclass = "\\documentclass[13pt,a4paper,sans]{moderncv}" -- Default
-
-  -- local dc = theme.documentclass
-  -- local font_size = dc.fontsize or "12pt"
-  -- local paper_size = dc.papersize or "a4paper"
-  -- local font_family = dc.fontfamily or "sans"
-  local options = string.format("%s,%s,%s", dc["fontsize"], dc.papersize, dc.fontfamily)
-  debug_log("dc: " .. repr(dc))
-  --debug_log("dc.fontsize: " .. stringify(dc.fontsize))
-  
-
-  return options
-end
 
 
 -- Function to recursively merge user config with defaults

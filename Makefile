@@ -1,6 +1,6 @@
 OUT_DIR=output
-IN_DIR=.
-IN_PATT=$(IN_DIR)/sample.md
+IN_DIR=markdown
+IN_PATT=$(IN_DIR)/*.md
 STYLES_DIR="templates"
 LOGS_DIR=logs
 STYLE=moderncv

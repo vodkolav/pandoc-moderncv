@@ -1,0 +1,234 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2015 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+
+\documentclass[10pt,a4paper,sans,colorlinks=true]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+\usepackage[scale=0.8]{geometry}
+
+% allow injected header-includes (from Lua filter/frontmatter)
+\moderncvcolor{blue}
+
+\moderncvstyle[left,details]{classic}
+
+\setlength{\hintscolumnwidth}{2cm}
+
+\name{Johnny}{Coder}
+
+\title{Awesomeness Manager}
+
+\address{Mytown, Mycountry}{}{}
+
+\phone[mobile]{+00 (0)12 345 6789}
+
+\email{email@example.com}
+
+\homepage{www.johndoe.com}
+
+\social[github]{Johnny-Coder}
+
+\social[linkedin]{Johnny-Coder}
+
+\social[twitter]{jdoe}
+% \usepackage[section]{placeins}
+\usepackage{comment}
+
+\colorlet{color1_dark}{color1!50!black}
+% \widowpenalties 1 10000
+% \raggedbottom
+
+% provide a fallback for pandoc's \tightlist macro
+\providecommand{\tightlist}{}
+
+% bibliography adjustements (only useful if you make citations in your resume, or print a list of publications using BibTeX)
+%   to show numerical labels in the bibliography (default is to show no labels)
+%\makeatletter\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}\makeatother
+\renewcommand*{\bibliographyitemlabel}{[\arabic{enumiv}]}
+%   to redefine the bibliography heading string ("Publications")
+%\renewcommand{\refname}{Articles}
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+%\newcites{book,misc}{{Books},{Others}}
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+\hypersetup{urlcolor=color1_dark}                               % color for external hyperlinks
+%\begin{CJK*}{UTF8}{gbsn}                          % to typeset your resume in Chinese using CJK
+%-----       resume       ---------------------------------------------------------
+\makecvtitle
+
+Text without definition lists is rendered as regular paragraph, filling
+the whole width of the document. Often used in the ``About'' block,
+where you can briefly list your specialties.
+
+\begin{itemize}
+\tightlist
+\item
+  List items do a line break by definition.
+\item
+  Just make sure they are separated by a blank line from the previous
+  and next paragraphs.
+\end{itemize}
+
+But regular consecutive paragraphs (newline was here, where'd it go?)
+get concatenated into one unless backslash is used.\newline Ending a
+line with a backslash forces a line break.
+
+\section{Education (cventry)}\label{education-cventry}
+
+\cventry{year--year}{Degree}{Institution}{City}{Grade}{Description. Can be one or more lines, and can include lists, links,
+etc.\newline }
+
+\cventry{2010-2014 (expected)}{\textbf{PhD, Computer Science}}{Awesome University}{MyTown}{}{Thesis title: Deep Learning Approaches to the Self-Awesomeness
+Estimation Problem
+\begin{itemize}
+\item
+  Minor: Awesomeology
+\item
+  Major: Awesome Science
+\end{itemize}}
+
+\section{Master thesis (cvitem)}\label{master-thesis-cvitem}
+
+\cvitem{title}{Title (cvitem)}
+
+\cvitem{supervisors}{Supervisors (cvitem)}
+
+\cvitem{description}{Short thesis abstract (cvitem)}
+
+\section{Experience}\label{experience}
+
+\subsection{Vocational (cventry)}\label{vocational-cventry}
+
+\cventry{1647-1650}{Job title}{Employer}{City}{}{General description no longer than 1--2 lines.\newline Detailed
+achievements:
+\begin{itemize}
+\tightlist
+\item
+  Achievement 1
+\item
+  Achievement 2 (with sub-achievements)
+  \begin{itemize}
+  \tightlist
+  \item
+    Sub-achievement (a);
+  \item
+    Sub-achievement (b), with sub-sub-achievements (don't do this!);
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi}.}
+    \tightlist
+    \item
+      Sub-sub-achievement i;
+    \item
+      Sub-sub-achievement ii;
+    \item
+      Sub-sub-achievement iii;
+    \end{enumerate}
+  \item
+    Sub-achievement (c);
+  \end{itemize}
+\item
+  Achievement 3
+\item
+  Achievement 4
+\end{itemize}}
+
+\cventry{1645-1647}{Job title}{Employer}{City}{}{Description line 1\newline Description line 2\newline Description line
+3\newline }
+
+\subsection{Miscellaneous (cventry)}\label{miscellaneous-cventry}
+
+\cventry{year--year}{Job title}{Employer}{City}{}{Description}
+
+\section{Interests (cvitem)}\label{interests-cvitem}
+
+\cvitem{hobby 1}{Description}
+
+\cvitem{hobby 2}{Description}
+
+\cvitem{hobby 3}{Description}
+
+\section{Languages
+(cvitemwithcomment)}\label{languages-cvitemwithcomment}
+
+\cvitemwithcomment{Language 1}{Skill level}{Comment}
+
+\cvitemwithcomment{Language 2}{Skill level}{Comment}
+
+\cvitemwithcomment{Language 3}{Skill level}{Comment}
+
+\cvitemwithcomment{Language 4}{Skill level}{Comment}
+
+Note: up to 2 fields supported. you can put more content in the field
+itself, but it will not be split into more fields.
+
+\section{Computer skills (cvdoubleitem
+,cvtripleitem)}\label{computer-skills-cvdoubleitem-cvtripleitem}
+
+\cvdoubleitem{\textbf{Left}}{content left }{\textbf{Right}}{ content right}
+
+\cvdoubleitem{category 2}{XXX, YYY, ZZZ }{category 5}{ XXX, YYY, ZZZ}
+
+\cvtripleitem{\textbf{left}}{content left }{\textbf{center}}{ content center }{\textbf{right}}{ content right}
+
+\cvdoubleitem{category 3}{XXX, YYY, ZZZ }{category 6}{ XXX, YYY, ZZZ}
+
+\section{Extra 1(cvlistitem)}\label{extra-1cvlistitem}
+
+\cvlistitem{Item 1}
+
+\cvlistitem{Item 2}
+
+\cvlistitem{Item 3. This item is particularly long and therefore normally spans over
+several lines. Did you notice the indentation when the line wraps?}
+
+\section{Extra 2 (cvlistdoubleitem)}\label{extra-2-cvlistdoubleitem}
+
+\cvlistdoubleitem{Item 1}{Item 4}
+
+\cvlistdoubleitem{Item 2}{Item 5}
+
+\cvlistdoubleitem{Item 3}{Item 6. Like item 3 in the single column list before, this item is
+particularly long to wrap over several lines}
+
+\section{References (cvcolumns)}\label{references-cvcolumns}
+
+here, block content formatting is preserved.
+
+\begin{cvcolumns}
+    \cvcolumn{Category 1}{reguar block content for category 1,\newline which can include lists,
+code blocks, etc.}
+    \cvcolumn{Category 2}{\begin{itemize}
+\tightlist
+\item
+  \textbf{Person 1}
+\item
+  Person 2
+\item
+  Person 3
+\end{itemize}}
+    \cvcolumn{All the rest \& some more}{That person\newline and those also\newline (all available upon request).} 
+\end{cvcolumns}
+
+\section{Publications (under
+construction)}\label{publications-under-construction}
+
+{[}1{]} John Doe. Title, year.
+
+{[}2{]} John Doe. Title, year.
+
+{[}3{]} John Doe and Author 1. Title. Publisher, edition edition, year.
+
+{[}4{]} John Doe and Author 2. Title. Publisher, edition edition, year.
+
+{[}5{]} John Doe and Author 3. Title, year.
+
+\end{document}
+
+
+%% end of file `template.tex'.

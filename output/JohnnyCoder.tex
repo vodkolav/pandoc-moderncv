@@ -28,9 +28,9 @@
 
 \homepage{www.johndoe.com}
 
-\social[twitter]{jcoe}
-
 \social[github]{Johnny-Coder}
+
+\social[twitter]{jcoe}
 
 \social[linkedin]{Johnny-Coder}
 % \usepackage[section]{placeins}
@@ -83,9 +83,9 @@ Estimation Problem}
 
 \cventry{2010-2017}{Awesomeness manager}{awesomia}{moon}{}{Short text containing the type of work done, results obtained, lessons
 learned and other insightful remarks.\newline Here too, ending a line
-with a backslash forces a line break.\newline List items do a line break
-by definition.\newline But regular consecutive paragraphs get
-concatenated into one unless backslash is used.
+with a backslash forces a line break. List items do a line break by
+definition. But regular consecutive paragraphs get concatenated into one
+unless backslash is used.
 Can also include lists and links:
 \begin{itemize}
 \item
@@ -121,7 +121,7 @@ be used to have named items.
 
 \cventry{\textbf{Linux Kernel}}{\url{kernel.org}}{JavaScript}{}{}{implemented multithreading over a long weekend}
 
-\cvdoubleitem{\href{http://nodejs.org}{\textbf{node.js}}}{which was actually totally my idea.}{\textbf{COBOL}}{Implemented a web server in COBOL as a joke, but it actually worked.}
+\cvdoubleitem{\href{http://nodejs.org}{\textbf{node.js}}}{which was actually totally my idea. }{\textbf{COBOL}}{ Implemented a web server in COBOL as a joke, but it actually worked.}
 
 \cvitem{Special relativity}{derived the famous equation \(E=mc^2\) in my spare time}
 
@@ -129,6 +129,28 @@ You can use a \texttt{\textbackslash{}filbreak} directive to to prevent
 orphaned headers.
 
 \filbreak
+
+\section{cvlistitem}\label{cvlistitem}
+
+\cvlistitem{Item 1}
+
+\cvlistitem{Item 2}
+
+\cvlistitem{Item 3}
+
+\section{cvlistdoubleitem}\label{cvlistdoubleitem}
+
+\cvlistdoubleitem{Item 1}{Item 4}
+
+\cvlistdoubleitem{Item 2}{Item 5}
+
+\cvlistdoubleitem{Item 3}{Item 6}
+
+\section{Just paragraphs}\label{just-paragraphs}
+
+This is a paragraph. It will be treated as a single block of text, even
+if it is written as multiple lines in the markdown source. To have
+multiple paragraphs, you need to separate them with a blank line.
 
 \section{Skills}\label{skills}
 
@@ -138,7 +160,7 @@ orphaned headers.
 
 \section{Languages}\label{languages}
 
-\cvtripleitem{\textbf{Klingon}}{native speaker}{\textbf{English}}{so-so}{\textbf{Spanish}}{Por qué?}
+\cvtripleitem{\textbf{Klingon}}{native speaker }{\textbf{English}}{ so-so }{\textbf{Spanish}}{ Por qué?}
 
 \end{document}
 
