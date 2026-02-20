@@ -87,7 +87,9 @@ Term field 1 | Term field 2 | ...
 ```
 
 Following the pandoc manual on [DefinitionLists](https://pandoc.org/MANUAL.html#definition-lists): 
-`A Term may have multiple Definitions, and each Definition may consist of one or more block elements (paragraph, code block, list, etc.), each indented four spaces or one tab stop. The body of the definition (not including the first line) should be indented four spaces.`, we determine the type of entry according to the structure of the Definition list: 
+
+> A Term may have multiple Definitions, and each Definition may consist of one or more block elements (paragraph, code block, list, etc.), each indented four spaces or one tab stop. The body of the definition (not including the first line) should be indented four spaces., 
+We determine the type of entry according to the structure of the Definition list: 
 - whether definitions have block content or not (either 0 or more)
 - number of definitions per Term (either 1 or more)
 - number of fields per Term (either 1 or more)
@@ -96,45 +98,7 @@ Following the pandoc manual on [DefinitionLists](https://pandoc.org/MANUAL.html#
 # Entry types
 Thus 2 major types of entry macros emerge: 
 
-1. **Detailed Entries (`\cventry`)**  
-2. **Compact Entries (`\cvitem` family)**  
+1. **Compact Entries (`\cvitem` family)**  
+2. **Detailed Entries (`\cventry`)**  
 
-
-
-# Detailed Entries (`\cventry`)
-
-If
-1. A DefList has only one definition.
-2. The definition has a body of block elements (paragraph, code block, list, etc.)
-
-Then it's mapped to `\cventry` macro as follows:
-
-- Term maps to first parameter of `\cventry`.
-- Definition fields go to parameters 2-5 of the macro.
-    - If Definition has less then 4 fields, the parameters of the missing definitions are left empty, e.g.: `...{Def2}{}{}...`
-    - If Definition has more than 4 fields, an error is raised, as `\cventry` only supports 4 parameters for definition fields. [^2]
-- Block elements go to parameter 6 of the macro.
-- All inner formatting of Terms, definitions and Block elements of the DefinitionList is preserved. Their processing is done according to default pandoc logic.
-
-
-Example: 
-
-```markdown
-Term
-: Def1 | *Def2* | Def3 
-
-    **regular blocks**
-    more regular blocks
-```
-
-Maps to:
-```latex
-\cventry{Term}{Def1}{\textit{Def2}}{Def3}{}{
-            \textbf{regular blocks} 
-            more regular blocks
-            }
-``` 
-
-# Footnotes
-
-[^2]: maybe instead of error, the extra parts are concatenated and put into the 5th parameter, e.g.: `...{Def4 Def5 Def6}...`
+The rules that determine the exact macro, along with their mapping from Markdown to LaTeX, are in [cvitems.md](cvitems.md)
