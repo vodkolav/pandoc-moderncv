@@ -33,7 +33,7 @@ png: init
 	for f in $(IN_PATT); do \
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo $$FILE_NAME.png; \
-		convert -density 500 -quality 120 \
+		convert -density 500 -quality 300 \
 				-background white -alpha off \
 				$(OUT_DIR)/$$FILE_NAME.pdf  docs/assets/$$FILE_NAME.png;\
 	done

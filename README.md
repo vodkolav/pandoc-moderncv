@@ -79,7 +79,7 @@ The CV is separated into sections (such as `# Experience`, `# Education`, etc.) 
 The main content of your resume is created using [Extended Markdown definition lists](#appendix-understanding-definition-lists) under section headings. The structure of the definition list determines how the content is rendered in the final PDF. The syntax is designed with the intent that the visual structure you want in the PDF should be roughly mirrored by the structure of the definition list in Markdown.
 
 ## Examples 
-Below are minimal examples for each implemented entry type; markdown on top, resulting LaTeX in a `latex` block. 
+Below are minimal examples for each implemented entry type; markdown on top, resulting Rendered PDF block below. 
 
 ### Simple (one-line)
 Term + single definition, no block content = compact item (one-line output).
@@ -94,11 +94,8 @@ hobby 2
 : Description 2
 ```
 
-```latex
-\section{Interests}
-\cvitem{hobby 1}{Description 1}
-\cvitem{hobby 2}{Description 2}
-```
+![Rendered PDF](docs/assets/1.png)
+
 
 ### Item with comment
 Term + single definition with 2 fields, no block content = compact item (one-line + comment on the right) output
@@ -110,10 +107,7 @@ English
 : Fluent | learned in school
 ```
 
-```latex
-\section{Languages}
-\cvitemwithcomment{English}{Fluent}{learned in school}
-```
+![Rendered PDF](docs/assets/2.png)
 
 ### Double / Triple items
 Term with `n` (either 2 or 3) fields + single definition with `n` fields, no block content = multi-column single-line item. `n` determines whether it's a double or triple item. \
@@ -130,10 +124,7 @@ Left | Center | Right
 : A | B | C
 ```
 
-```latex
-\cvdoubleitem{Programming}{Python, C++}{Tools}{Git, Docker}
-\cvtripleitem{Left}{A}{Center}{B}{Right}{C}
-```
+![Rendered PDF](docs/assets/3.png)
 
 ### List items
 Single term + multiple definitions = list-style items 
@@ -148,12 +139,6 @@ my hobbies
 : Photography
 ```
 
-```latex
-\cvlistitem{Skiing}
-\cvlistitem{Cooking}
-\cvlistitem{Photography}
-```
-
 2 fields in **All** definitions = double-column list-style items
 
 ```markdown
@@ -163,11 +148,8 @@ double list
 : Item C | Item F
 ```
 
-```latex
-\cvlistdoubleitem{Item A}{Item D}
-\cvlistdoubleitem{Item B}{Item E}
-\cvlistdoubleitem{Item C}{Item F}
-```
+![Rendered PDF](docs/assets/4.png)
+
 
 ### Detailed entry (job / project / education)
 Single Term + single definition with up to 4 fields, with indented block content = detailed item (job/project with description and bullets).
@@ -183,10 +165,7 @@ Senior Engineer
     - Improved reliability
 ```
 
-```latex
-\section{Experience}
-\cventry{2018--2024}{Senior Engineer}{Acme Corp}{Remote}{}{Led platform team.\begin{itemize}\item Built APIs\item Improved reliability\end{itemize}}
-```
+![Rendered PDF](docs/assets/5.png)
 
 ### Columns (multiple named columns)
 Single Term + multiple definitions, each with block content = column layout (multiple named columns).\
@@ -212,18 +191,7 @@ Term (omitted)
     That person and those also (all available upon request).
 ```
 
-**Resulting LaTeX:**
-```latex
-\begin{cvcolumns}
-    \cvcolumn{Category 1}{Regular block content for category 1, which can include lists, code blocks, etc.}
-    \cvcolumn{Category 2}{\begin{itemize}
-    \item \textbf{Person 1}
-    \item Person 2
-    \item Person 3
-    \end{itemize}}
-    \cvcolumn{All the rest \& some more}{That person and those also (all available upon request).}
-\end{cvcolumns}
-```
+![Rendered PDF](docs/assets/6.png)
 
 That's the minimal quickstart. For full details, examples and edge cases see the files in `docs/`.
 
