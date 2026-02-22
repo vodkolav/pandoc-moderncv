@@ -25,8 +25,19 @@ pdf: tex
 		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
 		echo cooking $$FILE_NAME.pdf; \
 		$(PDFengine) -interaction=nonstopmode -halt-on-error \
-				 -output-directory=$(OUT_DIR) $(OUT_DIR)/$$FILE_NAME.tex >> $(LOGS_DIR)/$(PDFengine).log; \
+				 -output-directory=$(OUT_DIR) $(OUT_DIR)/$$FILE_NAME.tex >> $(LOGS_DIR)/$(PDFengine).log;\
 	done
+
+
+png: init
+	for f in $(IN_PATT); do \
+		FILE_NAME=`basename $$f | sed 's/.md//g'`; \
+		echo $$FILE_NAME.png; \
+		convert -density 500 -quality 120 \
+				-background white -alpha off \
+				$(OUT_DIR)/$$FILE_NAME.pdf  docs/assets/$$FILE_NAME.png;\
+	done
+
 
 html: init
 	for f in $(IN_PATT); do \

@@ -10,7 +10,7 @@ social:
     twitter: jcoe
     github: Johnny-Coder
 classoption:
-    - 10pt,
+    - 12pt,
     - a4paper,
     - sans,
     - colorlinks=true
@@ -23,8 +23,8 @@ theme:
     hintscolumnwidth: 2cm
 ---
 
-In this style, the resume starts with an "About" block, where you can briefly list your specialties, or ```include a salient quote```\
-Ending a line with a backslash forces a line break.
+This is my resume. There are many like it, but this one is mine. My resume is my best friend. It is my life. I must master it as I must master my life. Without me, my resume is useless. Without my resume, I am useless. I must tailor my resume perfectly. I must target more accurately than other applicants who are trying to overtake me. I must get the position before they get it. I will...
+Before Laszlo Bock I swear this creed. My resume and I are the defenders of my career. We are the masters of the job market. We are the saviors of my life. So be it, until there is no work, but happy hour, cheers!
 
 
 # Education
