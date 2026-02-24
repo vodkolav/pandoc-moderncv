@@ -3,8 +3,8 @@
 This Pandoc Lua filter converts Markdown resumes into PDF via LaTeX using the popular `moderncv` class. It expects a simple Markdown structure (YAML frontmatter + definition lists) and turns those into nicely formatted CV sections.
 
 |Markdown source| |PDF output|
-|---|---|---|
-|![MD](docs/assets/JohnnyCoderMD.png) |➡️|<img src="docs/assets/JohnnyCoder.png" width="1024">|
+|:---:|---|:---:|
+|![MD](docs/assets/JohnnyCoderMD.png) |➡️|<img src="docs/assets/JohnnyCoder.png" width="1224">|
 
 
 # Requirements

@@ -42,7 +42,7 @@ assets: init
 	
 	pwd
 	echo "\`\`\`markdown" > JC.md
-	head -55 markdown/JohnnyCoder.md >> JC.md
+	head -45 markdown/JohnnyCoder.md >> JC.md
 	echo "..." >> JC.md
 	echo "\`\`\`" >> JC.md
 	mv JC.md docs/assets/JC.md
@@ -55,6 +55,7 @@ assets: init
 		--highlight-style zenburn \
 		-o JC.html
 	cd docs/assets/ && wkhtmltoimage --quality 100 --width 1024 --enable-local-file-access JC.html JohnnyCoderMD.png
+	cd docs/assets/ && rm JC.md JC.html
 
 html: init
 	for f in $(IN_PATT); do \
