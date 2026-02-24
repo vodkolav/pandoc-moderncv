@@ -38,6 +38,23 @@ png: init
 				$(OUT_DIR)/$$FILE_NAME.pdf  docs/assets/$$FILE_NAME.png;\
 	done
 
+assets: init
+	
+	pwd
+	echo "\`\`\`markdown" > JC.md
+	head -55 markdown/JohnnyCoder.md >> JC.md
+	echo "..." >> JC.md
+	echo "\`\`\`" >> JC.md
+	mv JC.md docs/assets/JC.md
+
+	cd docs/assets/ && pandoc JC.md \
+		-s \
+		--no-highlight \
+		--self-contained \
+		--css VScodeDark.css \
+		--highlight-style zenburn \
+		-o JC.html
+	cd docs/assets/ && wkhtmltoimage --quality 100 --width 1024 --enable-local-file-access JC.html JohnnyCoderMD.png
 
 html: init
 	for f in $(IN_PATT); do \

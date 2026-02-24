@@ -28,9 +28,9 @@
 
 \homepage{www.johndoe.com}
 
-\social[github]{Johnny-Coder}
-
 \social[linkedin]{Johnny-Coder}
+
+\social[github]{Johnny-Coder}
 
 \social[twitter]{jdoe}
 % \usepackage[section]{placeins}
@@ -76,13 +76,14 @@ where you can briefly list your specialties.
 \end{itemize}
 
 But regular consecutive paragraphs (newline was here, where'd it go?)
-get concatenated into one unless backslash is used.\newline Ending a
-line with a backslash forces a line break.
+get concatenated into one unless backslash is used.\\
+Ending a line with a backslash forces a line break.
 
 \section{Education (cventry)}\label{education-cventry}
 
 \cventry{year--year}{Degree}{Institution}{City}{Grade}{Description. Can be one or more lines, and can include lists, links,
-etc.\newline }
+etc.\\
+}
 
 \cventry{2010-2014 (expected)}{\textbf{PhD, Computer Science}}{Awesome University}{MyTown}{}{Thesis title: Deep Learning Approaches to the Self-Awesomeness
 Estimation Problem
@@ -105,8 +106,8 @@ Estimation Problem
 
 \subsection{Vocational (cventry)}\label{vocational-cventry}
 
-\cventry{1647-1650}{Job title}{Employer}{City}{}{General description no longer than 1--2 lines.\newline Detailed
-achievements:
+\cventry{1647-1650}{Job title}{Employer}{City}{}{General description no longer than 1--2 lines.\\
+Detailed achievements:
 \begin{itemize}
 \tightlist
 \item
@@ -138,12 +139,18 @@ achievements:
   Achievement 4
 \end{itemize}}
 
-\cventry{1645-1647}{Job title}{Employer}{City}{}{Description line 1\newline Description line 2\newline Description line
-3\newline }
+\cventry{1645-1647}{Job title}{Employer}{City}{}{Description line 1\\
+Description line 2\\
+Description line 3\\
+}
 
-\subsection{Miscellaneous (cventry)}\label{miscellaneous-cventry}
+\section{Miscellaneous (cventry)}\label{miscellaneous-cventry}
 
-\cventry{year--year}{Job title}{Employer}{City}{}{Description}
+\cventry{year--year}{Job title}{Employer}{City}{}{\textbf{Tip}: To prevent orphaned headers in PDF, prepend them with
+\texttt{\textbackslash{}filbreak} directive in markdown source.\\
+Description\\
+More description\\
+Even more description}
 
 \section{Interests (cvitem)}\label{interests-cvitem}
 
@@ -172,7 +179,7 @@ itself, but it will not be split into more fields.
 
 \cvdoubleitem{\textbf{Left}}{content left }{\textbf{Right}}{ content right}
 
-\cvdoubleitem{category 2}{XXX, YYY, ZZZ }{category 5}{ XXX, YYY, ZZZ}
+\cvdoubleitem{\textbf{Left}}{XXX, YYY, ZZZ }{\textbf{Right}}{ XXX, YYY, ZZZ}
 
 \cvtripleitem{\textbf{left}}{content left }{\textbf{center}}{ content center }{\textbf{right}}{ content right}
 
@@ -201,8 +208,8 @@ particularly long to wrap over several lines}
 here, block content formatting is preserved.
 
 \begin{cvcolumns}
-    \cvcolumn{Category 1}{reguar block content for category 1,\newline which can include lists,
-code blocks, etc.}
+    \cvcolumn{Category 1}{reguar block content for category 1,\\
+which can include lists, code blocks, etc.}
     \cvcolumn{Category 2}{\begin{itemize}
 \tightlist
 \item
@@ -212,7 +219,9 @@ code blocks, etc.}
 \item
   Person 3
 \end{itemize}}
-    \cvcolumn{All the rest \& some more}{That person\newline and those also\newline (all available upon request).} 
+    \cvcolumn{All the rest \& some more}{That person\\
+and those also\\
+(all available upon request).} 
 \end{cvcolumns}
 
 \section{Publications (under

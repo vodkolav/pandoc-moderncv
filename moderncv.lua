@@ -71,32 +71,6 @@ function preserve(field)
 end
 
 
-function  Inline(inl)
-  -- debug_log("Inline found")
-  -- or inl.t == 'SoftBreak'
-  if inl.t == 'LineBreak'  then
-    return pandoc.RawInline('latex', '\\newline ')
-    --- return pandoc.Str(escape_tex(inl.text))
-  else
-    -- if inl.t ~= 'Str' and inl.t ~= 'Space' then
-    --   -- debug_log( inl.t .. " found")
-    -- end
-    return inl
-  end
-end
-
-function  Block(blck)
-  -- debug_log("Inline found")
-  -- debug_log( blck.t .. " found: " .. repr(blck))
-  -- if blck.t == 'Para' or blck.t == 'Plain' or blck.t == 'RawBlock' then
-  --   return pandoc.RawInline('latex', stringify(blck)  .. " (" .. blck.t .. ")")
-  --   --- return pandoc.Str(escape_tex(inl.text))
-  -- -- else
-  -- --   if blck.t ~= 'Para' and blck.t ~= 'Plain' then
-  -- --   end
-  -- --   return blck
-  -- end
-end
 
 -- Ensure pandoc global is defined
 if not pandoc then
@@ -214,7 +188,8 @@ function DefinitionList(el)
             elseif #first_def_fields > 2 then
               -- debug_log("\\cvitem family supports a maximum of 2 fields in the definition.")
               -- debug_log("fields: " .. repr(first_def_fields))
-              error("\\cvitem family supports a maximum of 2 fields in the definition.")
+              loc = stringify(item)
+              error("Near " .. loc .."\n \\cvitem family supports a maximum of 2 fields in the definition.")
             end
 
           elseif #term_fields > 3 then

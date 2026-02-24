@@ -59,6 +59,8 @@ description
 
     General description no longer than 1–2 lines.\
     Detailed achievements:
+
+
     - Achievement 1
     - Achievement 2 (with sub-achievements)
         - Sub-achievement (a);
@@ -77,12 +79,15 @@ description
     Description line 2 \
     Description line 3 \
 
-## Miscellaneous (cventry)
+# Miscellaneous (cventry)
 
 year–year 
 : Job title | Employer | City
 
-    Description
+    **Tip**: To prevent orphaned headers in PDF, prepend them with `\filbreak` directive in markdown source.\
+    Description\
+    More description\
+    Even more description
 
 
 # Interests (cvitem)
@@ -121,7 +126,7 @@ Note: up to 2 fields supported. you can put more content in the field itself, bu
 **Left** | **Right**
 : content left | content right 
 
-category 2 | category 5 
+**Left** | **Right**
 : XXX, YYY, ZZZ | XXX, YYY, ZZZ
 
 **left** | **center** | **right** 

@@ -1,0 +1,51 @@
+/* Reset and Body */
+body {
+    background-color: #1e1e1e !important;
+    margin: 0;
+    padding: 40px;
+}
+
+/* Target the specific nested structure Pandoc uses */
+div.sourceCode, 
+pre.sourceCode, 
+pre.sourceCode > code {
+    background-color: #1e1e1e !important;
+    color: #d4d4d4 !important;
+    font-family: 'Consolas', monospace !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+    
+    /* THE WRAPPING FIX */
+    white-space: pre-wrap !important; 
+    white-space: -moz-pre-wrap !important; 
+    white-space: -pre-wrap !important; 
+    white-space: -o-pre-wrap !important; 
+    word-wrap: break-word !important;
+    
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Container styling */
+div.sourceCode {
+    border: 1px solid #3c3c3c;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Ensure spans don't break the layout */
+pre.sourceCode span {
+    display: inline !important;
+    white-space: pre-wrap !important;
+}
+
+/* Syntax Highlighting Colors (Manually defined since --no-highlight is used) */
+.co { color: #6a9955; font-style: italic; } /* Comment */
+.an { color: #9cdcfe; } /* Annotation/Attribute */
+.kw { color: #569cd6; font-weight: bold; } /* Keyword */
+.st { color: #ce9178; } /* String */
+.dt { color: #9cdcfe; } /* DataType */
+.fu { color: #dcdcaa; } /* Function */
+.ot { color: #dcdcaa; } /* Other */

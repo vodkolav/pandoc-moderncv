@@ -2,9 +2,9 @@
 
 This Pandoc Lua filter converts Markdown resumes into PDF via LaTeX using the popular `moderncv` class. It expects a simple Markdown structure (YAML frontmatter + definition lists) and turns those into nicely formatted CV sections.
 
-|||
-|---|---|
-| ![Page 1](docs/assets/JohnnyCoder-0.png) |![Page 2](docs/assets/JohnnyCoder-1.png)|
+|Markdown source| |PDF output|
+|---|---|---|
+|![MD](docs/assets/JohnnyCoderMD.png) |➡️|<img src="docs/assets/JohnnyCoder.png" width="1024">|
 
 
 # Requirements
@@ -31,6 +31,7 @@ The content of the markdown file must be structured in a specific way for the fi
 Personal info and theme configuration go in the YAML frontmatter. 
 
 ### Basic personal info 
+These populate CV header with the personal info.
 - `name`: Your full name. Can also use `firstname` and `lastname`.
 - `title`: The title of the document (e.g., "Curriculum Vitae" or "Business Analyst").
 - `address`: Your mailing address.
@@ -40,6 +41,7 @@ Personal info and theme configuration go in the YAML frontmatter.
 - `photo`: Path to a photo.
 
 ### Theme options (optional): 
+You only need specify options you want to change; sensible defaults are used otherwise.
 
 - `fontsize`: Font size for the document (e.g., `10pt`, `11pt`, `12pt`).
 - `papersize`: Paper size for the document (e.g., `a4paper`, `letterpaper`).
@@ -48,12 +50,10 @@ Personal info and theme configuration go in the YAML frontmatter.
 - `moderncvcolor`: Color scheme for the `moderncv` class (e.g., `blue`, `green`, `red`).
 - `scale`: Scale factor for the hints column width (e.g., `0.8`, `0.93`).
 
-    Only specify options you want to change; sensible defaults are used otherwise.
 
-Example Frontmatter:
+Example minimal Frontmatter:
 
 ```yaml
-
 firstname: Johnny
 lastname: Coder
 title: Curriculum Vitae
@@ -68,7 +68,6 @@ theme:
   moderncvstyle: classic
   moderncvcolor: purple
   scale: 0.9
-
 ```
 
 ## CV Sections 
@@ -76,7 +75,8 @@ The CV is separated into sections (such as `# Experience`, `# Education`, etc.) 
 
 ## CV items 
 
-The main content of your resume is created using [Extended Markdown definition lists](#appendix-understanding-definition-lists) under section headings. The structure of the definition list determines how the content is rendered in the final PDF. The syntax is designed with the intent that the visual structure you want in the PDF should be roughly mirrored by the structure of the definition list in Markdown.
+The main content of your resume is created using [Extended Markdown definition lists](#appendix-understanding-definition-lists) under section headings. The structure of the definition list determines how the content is rendered in the final PDF. \
+The syntax is designed with the intent that the visual structure you want in the PDF should be roughly mirrored by the structure of the definition list in Markdown.
 
 ## Examples 
 Below are minimal examples for each implemented entry type; markdown on top, resulting Rendered PDF block below. 
@@ -219,7 +219,7 @@ Term 2
 
 - **Term**: The title or heading for the entry.
 - **Definition**: The content or description associated with the term.
-- **Block Content**: Optional additional content, such as paragraphs, lists, or code blocks, indented under the definition.
+- **Block Content**: Optional additional content, such as paragraphs, lists, or code blocks, **indented** under the definition.
 
 ### Extended Structure with Fields
 
