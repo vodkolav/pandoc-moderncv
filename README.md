@@ -40,6 +40,11 @@ These populate CV header with the personal info.
 - `social`: A map of social media networks to usernames (e.g., `github: myuser`).
 - `photo`: Path to a photo.
 
+From this info a CV header will be produced:
+
+![header](/docs/assets/0.png)
+
+
 ### Theme options (optional): 
 You only need specify options you want to change; sensible defaults are used otherwise.
 
@@ -53,7 +58,8 @@ You only need specify options you want to change; sensible defaults are used oth
 
 Example minimal Frontmatter:
 
-```yaml
+```markdown
+---
 firstname: Johnny
 lastname: Coder
 title: Curriculum Vitae
@@ -68,6 +74,8 @@ theme:
   moderncvstyle: classic
   moderncvcolor: purple
   scale: 0.9
+  hintscolumnwidth: 3cm
+---
 ```
 
 ## CV Sections 
@@ -138,17 +146,19 @@ my hobbies
 : Cooking
 : Photography
 ```
+![Rendered PDF](docs/assets/4.png)
 
 2 fields in **All** definitions = double-column list-style items
 
 ```markdown
+# Hobbies
 double list 
 : Item A | Item D
 : Item B | Item E
 : Item C | Item F
 ```
 
-![Rendered PDF](docs/assets/4.png)
+![Rendered PDF](docs/assets/5.png)
 
 
 ### Detailed entry (job / project / education)
@@ -165,7 +175,7 @@ Senior Engineer
     - Improved reliability
 ```
 
-![Rendered PDF](docs/assets/5.png)
+![Rendered PDF](docs/assets/6.png)
 
 ### Columns (multiple named columns)
 Single Term + multiple definitions, each with block content = column layout (multiple named columns).\
@@ -191,7 +201,7 @@ Term (omitted)
     That person and those also (all available upon request).
 ```
 
-![Rendered PDF](docs/assets/6.png)
+![Rendered PDF](docs/assets/7.png)
 
 That's the minimal quickstart. For full details, examples and edge cases see the files in `docs/`.
 
