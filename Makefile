@@ -5,6 +5,7 @@ STYLES_DIR="templates"
 LOGS_DIR=logs
 STYLE=moderncv
 PDFengine=xelatex
+SHELL := /bin/bash
 
 all: tex pdf html docx rtf
 
@@ -39,23 +40,8 @@ png: init
 	done
 
 assets: init
-	
-	pwd
-	echo "\`\`\`markdown" > JC.md
-	head -45 markdown/JohnnyCoder.md >> JC.md
-	echo "..." >> JC.md
-	echo "\`\`\`" >> JC.md
-	mv JC.md docs/assets/JC.md
+	source docs/tools/build_assets.sh
 
-	cd docs/assets/ && pandoc JC.md \
-		-s \
-		--no-highlight \
-		--self-contained \
-		--css VScodeDark.css \
-		--highlight-style zenburn \
-		-o JC.html
-	cd docs/assets/ && wkhtmltoimage --quality 100 --width 1024 --enable-local-file-access JC.html JohnnyCoderMD.png
-	cd docs/assets/ && rm JC.md JC.html
 
 html: init
 	for f in $(IN_PATT); do \
