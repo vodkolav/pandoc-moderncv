@@ -123,7 +123,7 @@ Note: up to 2 fields supported. you can put more content in the field itself, bu
 <!-- 2 or 3 terms, single definition, 2 or 3 fields, no block content -->
 
 **Left** | **Right**
-: content left | content right
+: content left | *content right*
 
 **Left** | **Right**
 : XXX, YYY, ZZZ | XXX, YYY, ZZZ
@@ -137,8 +137,8 @@ category 3 | category 6
 
 # Alignment (cvtripleitem)
 
-**Good** | **Neutral** | **Evil**
-: Lawful good    | Neutral good | Chaotic good
+**Lawful** | **Neutral** | **Chaotic**
+: ~~Lawful good~~| Neutral good | Chaotic good
 : Lawful neutral | True neutral | Chaotic neutral
 : Lawful evil    | Neutral evil | Chaotic evil
 

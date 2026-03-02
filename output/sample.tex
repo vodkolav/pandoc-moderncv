@@ -35,7 +35,7 @@
 \social[twitter]{jdoe}
 % \usepackage[section]{placeins}
 \usepackage{comment}
-
+\usepackage{soul} 
 \colorlet{color1_dark}{color1!50!black}
 % \widowpenalties 1 10000
 % \raggedbottom
@@ -179,31 +179,31 @@ itself, but it will not be split into more fields.
 \section{Computer skills
 (cvdoubleitem)}\label{computer-skills-cvdoubleitem}
 
-\cvdoubleitem{\textbf{Left}}{content left }{\textbf{Right}}{ content right}
+\cvdoubleitem{\textbf{Left}}{content left}{\textbf{Right}}{\emph{content right}}
 
-\cvdoubleitem{\textbf{Left}}{XXX, YYY, ZZZ }{\textbf{Right}}{ XXX, YYY, ZZZ}
+\cvdoubleitem{\textbf{Left}}{XXX, YYY, ZZZ}{\textbf{Right}}{XXX, YYY, ZZZ}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\cvdoubleitem{category 3}{XXX }{category 6}{ YYY}
+\cvdoubleitem{category 3}{XXX}{category 6}{YYY}
 
-\cvdoubleitem{}{ZZZ }{}{ TTT}
+\cvdoubleitem{}{ZZZ}{}{TTT}
 
-\cvdoubleitem{}{WWW }{}{ UwU}
+\cvdoubleitem{}{WWW}{}{UwU}
 
 \section{Alignment (cvtripleitem)}\label{alignment-cvtripleitem}
 
-\cvtripleitem{\textbf{Good}}{Lawful good }{\textbf{Neutral}}{ Neutral good }{\textbf{Evil}}{ Chaotic good}
+\cvtripleitem{\textbf{Lawful}}{\st{Lawful good}}{\textbf{Neutral}}{Neutral good}{\textbf{Chaotic}}{Chaotic good}
 
-\cvtripleitem{}{Lawful neutral }{}{ True neutral }{}{ Chaotic neutral}
+\cvtripleitem{}{Lawful neutral}{}{True neutral}{}{Chaotic neutral}
 
-\cvtripleitem{}{Lawful evil }{}{ Neutral evil }{}{ Chaotic evil}
+\cvtripleitem{}{Lawful evil}{}{Neutral evil}{}{Chaotic evil}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\cvtripleitem{\textbf{left}}{content left }{\textbf{center}}{ content center }{\textbf{right}}{ content right}
+\cvtripleitem{\textbf{left}}{content left}{\textbf{center}}{content center}{\textbf{right}}{content right}
 
-\cvtripleitem{\textbf{left}}{more left }{\textbf{center}}{ more center }{\textbf{right}}{ more right}
+\cvtripleitem{\textbf{left}}{more left}{\textbf{center}}{more center}{\textbf{right}}{more right}
 
 \section{Extra 1(cvlistitem)}\label{extra-1cvlistitem}
 

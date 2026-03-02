@@ -136,15 +136,15 @@ function mk_item(type, term_fields, def_fields, i)
     debug_log("i, term_fields: " .. i .. " " .. repr(term_fields))
 
     macros = string.format("\\cvdoubleitem{%s}{%s}{%s}{%s}",
-                           preserve(term_fields[1]), stringify(def_fields[1]),
-                           preserve(term_fields[2]), stringify(def_fields[2]))
+                           preserve(term_fields[1]), preserve(def_fields[1]),
+                           preserve(term_fields[2]), preserve(def_fields[2]))
 
   elseif type == "cvtripleitem" then
     term_fields = tack(term_fields,i)
     macros = string.format("\\cvtripleitem{%s}{%s}{%s}{%s}{%s}{%s}",
-                          preserve(term_fields[1]), stringify(def_fields[1]),
-                          preserve(term_fields[2]), stringify(def_fields[2]),
-                          preserve(term_fields[3]), stringify(def_fields[3]))
+                          preserve(term_fields[1]), preserve(def_fields[1]),
+                          preserve(term_fields[2]), preserve(def_fields[2]),
+                          preserve(term_fields[3]), preserve(def_fields[3]))
 
   elseif type == "cvlistdoubleitem" then
     macros = string.format("\\cvlistdoubleitem{%s}{%s}", 
