@@ -90,7 +90,7 @@ skills
 
 # Interests
 
-interests
+|
 : Ethical Brilliance Deployment | Space-Grade Confidence 
 : Reducing Global Mediocrity | High-Gravity Resistance Training
 : Sublime Handshake Dynamics | Strategic Pause Architecture 

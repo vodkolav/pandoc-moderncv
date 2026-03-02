@@ -93,14 +93,15 @@ year–year
 # Interests (cvitem)
 <!-- single term, single definition, single field, no block content -->
 
-hobby 1 
-: Description 
+hobby 1
+: Description 1
 
 hobby 2 
-: Description 
+: Description 2
 
-hobby 3 
-: Description
+hobby 3
+: Description 30
+: Description 31
 
 
 # Languages (cvitemwithcomment)
@@ -112,43 +113,55 @@ Language 1
 Language 2 
 : Skill level | Comment
 
-Language 3 
-: Skill level | Comment
-
-Language 4 
-: Skill level | Comment
+Language 3
+: Writing | Expert
+: Speaking | Basic 
 
 Note: up to 2 fields supported. you can put more content in the field itself, but it will not be split into more fields.
 
-# Computer skills (cvdoubleitem ,cvtripleitem)
+# Computer skills (cvdoubleitem)
 <!-- 2 or 3 terms, single definition, 2 or 3 fields, no block content -->
 
 **Left** | **Right**
-: content left | content right 
+: content left | content right
 
 **Left** | **Right**
 : XXX, YYY, ZZZ | XXX, YYY, ZZZ
 
-**left** | **center** | **right** 
-: content left | content center | content right 
+---
 
 category 3 | category 6
-: XXX, YYY, ZZZ | XXX, YYY, ZZZ
+: XXX | YYY
+: ZZZ | TTT
+: WWW | UwU
+
+# Alignment (cvtripleitem)
+
+**Good** | **Neutral** | **Evil**
+: Lawful good    | Neutral good | Chaotic good
+: Lawful neutral | True neutral | Chaotic neutral
+: Lawful evil    | Neutral evil | Chaotic evil
+
+---
+
+**left** | **center** | **right** 
+: content left | content center | content right
+
+**left** | **center** | **right** 
+: more left | more center | more right
 
 
 # Extra 1(cvlistitem)
 <!-- single term (omitted), multiple definitions, single field, no block content -->
-
-list (omitted)
+|
 : Item 1 
 : Item 2 
 : Item 3. This item is particularly long and therefore normally spans over several lines. Did you notice the indentation when the line wraps?
 
 
 # Extra 2 (cvlistdoubleitem)
-<!-- single term (omitted), multiple definition, 2 fields, no block content -->
 
-double list (omitted)
+|
 : Item 1 | Item 4 
 : Item 2 | Item 5 
 : Item 3 | Item 6. Like item 3 in the single column list before, this item is particularly long to wrap over several lines 

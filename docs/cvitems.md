@@ -4,8 +4,8 @@
 Generally one-line content without fancy header.
 
 If
-1. DefList has a single definition
-2. That single definition has no body of block elements (paragraph, code block, list, etc.)
+<!-- 1. DefList has a single definition? -->
+2. First definition has no body of block elements (paragraph, code block, list, etc.)
 
 Then it's mapped to one of the `\cv...item` family of macros.
 
@@ -27,7 +27,8 @@ hobby 2
 : Description 2
 
 hobby 3
-: Description 3
+: Description 30
+: Description 31
 ```
 maps to 
 
@@ -35,7 +36,8 @@ maps to
 \section{Interests}
 \cvitem{hobby 1}{Description 1}
 \cvitem{hobby 2}{Description 2}
-\cvitem{hobby 3}{Description 3}
+\cvitem{hobby 3}{Description 30}
+\cvitem{}{Description 31}
 ```
 
 ### cvitemwithcomment
@@ -55,10 +57,8 @@ A Simple item with 2 fields in the definition, maps to `\cvitemwithcomment`.
 : so-so | learned in kindergarten
 
 Language 3
-: Skill level | Comment
-
-Language 4
-: Skill level | Comment 
+: Expert writing | Comment
+: Basic speaking | Comment 
 
 ```
 maps to 
@@ -67,8 +67,8 @@ maps to
 \section{Languages (cvitemwithcomment)}
 \cvitemwithcomment{Klingon}{native speaker}{fluent in reading and writing}
 \cvitemwithcomment{English}{so-so}{learned in kindergarten}
-\cvitemwithcomment{Language 3}{Skill level}{Comment}
-\cvitemwithcomment{Language 4}{Skill level}{Comment} 
+\cvitemwithcomment{Language 3}{Expert writing}{Comment}
+\cvitemwithcomment{}{Basic speaking}{Comment} 
 ```
 
 ## Multi items 
@@ -104,9 +104,12 @@ category 2 | category 5
 
 category Left | category Center | category Right (cvtripleitem)
 : content left | content center | content right
+: content left | content center | content right
 
 category 3 | category 6
-: XXX, YYY, ZZZ | XXX, YYY, ZZZ
+: XXX | YYY
+: ZZZ | TTT
+
 ```
 
 maps to 
@@ -115,6 +118,7 @@ maps to
 \cvdoubleitem{category Left}{content left}{category Right}{content right}
 \cvdoubleitem{category 2}{XXX, YYY, ZZZ}{category 5}{XXX, YYY, ZZZ}
 \cvtripleitem{category Left}{content left}{category Center}{content center}{category Right}{content right} 
+\cvtripleitem{}{content left}{}{content center}{}{content right} 
 \cvdoubleitem{category 3}{XXX, YYY, ZZZ}{category 6}{XXX, YYY, ZZZ}
 ```
 
@@ -133,7 +137,6 @@ More than 2 definition fields raises an error.
 If each definition has a single field, then the DefList maps to `\cvlistitem` as follows:
 
 ```markdown
-list (omitted)
 : Item 1 
 : Item 2 
 : Item 3
@@ -150,13 +153,14 @@ maps to
 ### cvlistdoubleitem
 If each definition has 2 fields, then the DefList maps to `\cvlistdoubleitem` as follows:
 
-```markdown
 <!-- single term (omitted), multiple definition, 2 fields, no block content -->
+
 ```markdown
-double list (omitted)
+
 : Item 1 | Item 4 
 : Item 2 | Item 5 
 : Item 3 | Item 6 
+
 ```
 
 maps to 
@@ -278,7 +282,7 @@ Below is the pseudocodefor item type determination logic. The DefinitionList fun
 
 ```pseudo
 #definitions = 0 
-    \\cvitem{term}{} --should not occur
+    \\cvitem{term}{} --should not be possible to occur
 
 #definitions > 0 
     definition[1] has block content  --?: or maybe at least one definition must have block content
@@ -304,53 +308,63 @@ Below is the pseudocodefor item type determination logic. The DefinitionList fun
     definition[1] has NO block content  --?: or maybe all definitions must have no block content
         --cvitem family...
 
-        #definitions = 1 
+        -- *items now support multiple definitions 
+
+        Term does not begin with ':'  --? not sure if enough
             --Simple items...
-            Term.#fields = 1
-                definition[1].#fields = 1 
+
+            exists definition with #fields <> definitions[1].#fields
+                error. all definitions must have same number of fields.
+            
+            Term.#fields == 1
+                definition[1].#fields == 1 
                     \\cvitem{term}{def} 
+                    \\cvitem{}{def} 
+                    ...
                 definition[1].#fields = 2 
                     \\cvitemwithcomment{term}{def.field1}{def.field2} 
                 definition[1].#fields > 2
                     error. up to 2 fields supported. 
-            
+
             Term.#fields > 3
-                error. up to 3 items supported
+                error. up to 3 items supported in multi items
 
             Term.#fields <> definition[1].#fields
                 error. double/triple items must have same number of term fields as definitions fields.
 
+            Else: -- all definitions have same #fields 
+            --Multi items
                 definition[1].#fields == 2 
-                    \\cvdoubleitem{term1}{def.field1}{term2}{def.field2}
+                    \\cvdoubleitem{term1}{def1.field1}{term2}{def1.field2}
+                    \\cvdoubleitem{}{def2.field1}{}{de2.field2}
+                    ...
 
                 definition[1].#fields == 3 
-                    \\cvtripleitem{term1}{def.field1}{term2}{def.field2}{term3}{def.field3}
+                    \\cvtripleitem{term1}{def1.field1}{term2}{def1.field2}{term3}{def1.field3}
+                    \\cvtripleitem{}{def2.field1}{}{def2.field2}{}{def2.field3}
+                    ...
 
+        Term begins with ':' 
 
-        #definitions > 1 
-            Term.#fields <> 1
-                error. list items must have single term field. 
-                --? since it's omitted we may not care about term fields at all. 
-                --? or maybe we can define proper amount of definition fields here? 
+            exists definition with #fields <>  Term.#fields
+                error. all definitions must have same number of fields.
 
-            Term.#fields == 1
-                --List items...
+            Else: all definitions have same #fields 
+                Term[1].#fields == 1
+                    \\cvlistitem{Term.field1}
+                    \\cvlistitem{def2.field1}
+                    ...
 
-                exists definition with #fields <> definition[1].#fields
-                    error. all definitions must have same number of fields.
+                Term[1].#fields == 2
+                    \\cvlistdoubleitem{Term.field1}{Term.field2}
+                    \\cvlistdoubleitem{def1.field1}{def1.field2}
+                    \\cvlistdoubleitem{def2.field1}{def2.field2}
+                    \\cvlistdoubleitem{def3.field1}{def3.field2}
+                    ...
 
-                Else: all definitions have same #fields 
-                    definition[1].#fields == 1
-                        \\cvlistitem{def1.field1}
-                        \\cvlistitem{def2.field1}
-                        ...
-
-                    definition[1].#fields == 2
-                        \\cvlistdoubleitem{def1.field1}{def1.field2}
-                        \\cvlistdoubleitem{def2.field1}{def2.field2}
-                        \\cvlistdoubleitem{def3.field1}{def3.field2}
-                        ...
-
+                Term[1].#fields >= 3
+                    maybe moderncv will implement cvlisttripleitem sometimes...
+                    for now it's error
 ```
 
 This should cover most common CV item types.
