@@ -29,7 +29,7 @@ local function repr(obj)
 end
 
 local function escape_tex(s)
-  if not s then return '' end  -- Handle nil values
+  if not s then return '' end -- Handle nil values
   s = s:gsub('\\', '\\textbackslash{}')
   s = s:gsub('%%', '\\%')
   s = s:gsub('{', '\\{')
@@ -46,11 +46,9 @@ local sep = "|"
 local function split_inlines_by_sep(inlines)
   local groups, current = {}, {}
   for b, el in ipairs(inlines) do
-    if el.t == 'Str' and  el.text == sep then
-
-        table.insert(groups, current)
-        current = {}
-
+    if el.t == 'Str' and el.text == sep then
+      table.insert(groups, current)
+      current = {}
     else
       table.insert(current, el)
     end
@@ -62,9 +60,8 @@ end
 
 function preserve(field)
   --preserves the inline formatting of the blocks
-  return pandoc.write(pandoc.Pandoc({pandoc.Plain(field)}), 'latex')
+  return pandoc.write(pandoc.Pandoc({ pandoc.Plain(field) }), 'latex')
 end
-
 
 -- Ensure pandoc global is defined
 if not pandoc then
@@ -78,25 +75,25 @@ function make_cvcolumns(term_fields, definitions)
   for i, def in ipairs(definitions) do
     local def_fields = def[1].c
 
-    local def_blocks = {table.unpack(def, 2)}
+    local def_blocks = { table.unpack(def, 2) }
 
     local desc = pandoc.write(pandoc.Pandoc(def_blocks), 'latex')
 
     table.insert(columns, string.format("\\cvcolumn{%s}{%s}",
-                  preserve(def_fields or ''), 
-                  desc or ''))
+      preserve(def_fields or ''),
+      desc or ''))
   end
 
   return pandoc.RawBlock('latex', string.format(
-                "\\begin{cvcolumns}\n    %s \n\\end{cvcolumns}",
-                table.concat(columns, '\n    ')
-              ))
+    "\\begin{cvcolumns}\n    %s \n\\end{cvcolumns}",
+    table.concat(columns, '\n    ')
+  ))
 end
 
-function tack(term_fields,i)
+function tack(term_fields, i)
   -- make term_fields empty for definitions above first
   if i ~= 1 then
-    term_fields = {{""},{""},{""}}
+    term_fields = { { "" }, { "" }, { "" } }
   end
   return term_fields
 end
@@ -105,87 +102,74 @@ function mk_item(type, term_fields, def_fields, i)
   local macros = ""
   if type == "empty" then
     macros = string.format("\\cvitem{%s}{}", preserve(term_fields[1]))
-
   elseif type == "cvitem" then
-    term_fields = tack(term_fields,i)
-    macros = string.format("\\cvitem{%s}{%s}", 
-                            preserve(term_fields[1]), preserve(def_fields[1]))
-
+    term_fields = tack(term_fields, i)
+    macros = string.format("\\cvitem{%s}{%s}",
+      preserve(term_fields[1]), preserve(def_fields[1]))
   elseif type == "cvitemwithcomment" then
-    term_fields = tack(term_fields,i)
+    term_fields = tack(term_fields, i)
     macros = string.format("\\cvitemwithcomment{%s}{%s}{%s}",
-                           preserve(term_fields[1]), preserve(def_fields[1]), preserve(def_fields[2]))
-
+      preserve(term_fields[1]), preserve(def_fields[1]), preserve(def_fields[2]))
   elseif type == "cvdoubleitem" then
-    term_fields = tack(term_fields,i)
+    term_fields = tack(term_fields, i)
 
     macros = string.format("\\cvdoubleitem{%s}{%s}{%s}{%s}",
-                           preserve(term_fields[1]), preserve(def_fields[1]),
-                           preserve(term_fields[2]), preserve(def_fields[2]))
-
+      preserve(term_fields[1]), preserve(def_fields[1]),
+      preserve(term_fields[2]), preserve(def_fields[2]))
   elseif type == "cvtripleitem" then
-    term_fields = tack(term_fields,i)
+    term_fields = tack(term_fields, i)
     macros = string.format("\\cvtripleitem{%s}{%s}{%s}{%s}{%s}{%s}",
-                          preserve(term_fields[1]), preserve(def_fields[1]),
-                          preserve(term_fields[2]), preserve(def_fields[2]),
-                          preserve(term_fields[3]), preserve(def_fields[3]))
-
+      preserve(term_fields[1]), preserve(def_fields[1]),
+      preserve(term_fields[2]), preserve(def_fields[2]),
+      preserve(term_fields[3]), preserve(def_fields[3]))
   elseif type == "cvlistdoubleitem" then
-    macros = string.format("\\cvlistdoubleitem{%s}{%s}", 
-                          preserve(def_fields[1]), preserve(def_fields[2]))
+    macros = string.format("\\cvlistdoubleitem{%s}{%s}",
+      preserve(def_fields[1]), preserve(def_fields[2]))
 
     if i == 1 then
       tf = string.gsub(preserve(term_fields[1]), ": ", "")
       macros = string.format("\\cvlistdoubleitem{%s}{%s}",
-                          tf, preserve(term_fields[2])) .. "\n\n" .. macros
+        tf, preserve(term_fields[2])) .. "\n\n" .. macros
     end
-
   elseif type == "cvlistitem" then
     macros = string.format("\\cvlistitem{%s}",
-                            preserve(def_fields[1]))
+      preserve(def_fields[1]))
 
     if i == 1 then
       tf = string.gsub(preserve(term_fields[1]), ": ", "")
       macros = string.format("\\cvlistitem{%s}",
-                            tf) .. "\n\n" .. macros
+        tf) .. "\n\n" .. macros
     end
-
-  else 
+  else
     error("Unknown item type: " .. type)
   end
 
   return pandoc.RawBlock('latex', macros)
-
 end
 
 function DefinitionList(el)
   local out = {}
   for _, item in ipairs(el.c or {}) do
-
     local term, definitions = item[1], item[2]
     local term_tex = preserve(term or {})
     local term_fields = split_inlines_by_sep(term)
 
-    local loc = "\nNear " .. stringify(item) .."\n"
+    local loc = "\nNear " .. stringify(item) .. "\n"
 
     if #definitions == 0 then
       -- No definitions, produce \cvitem with an empty description
-      table.insert(out, mk_item("empty", term_fields , {}))
-
-    else -- #definitions > 0 
+      table.insert(out, mk_item("empty", term_fields, {}))
+    else -- #definitions > 0
       -- Single definition: check for \cventry or \cvitem family
-      local first_def = definitions[1]      
+      local first_def = definitions[1]
       local first_def_fields = split_inlines_by_sep(first_def[1].c)
 
       if #first_def > 1 then -- first def has block content
-
-        local first_def_blocks = {table.unpack(first_def, 2)}
+        local first_def_blocks = { table.unpack(first_def, 2) }
 
         if #term_fields ~= 1 then
           error(loc .. "complex items must have single field in term (no separators)")
-
         elseif #definitions == 1 then
-
           local desc = pandoc.write(pandoc.Pandoc(first_def_blocks), 'latex')
           local fields = split_inlines_by_sep(first_def[1].c)
           if #fields > 4 then
@@ -207,9 +191,7 @@ function DefinitionList(el)
           cvcols = make_cvcolumns(term_fields, definitions)
           table.insert(out, cvcols)
         end
-
       else -- No block content, use \cvitem family
-
         for i, def in ipairs(definitions) do
           local def_fields = split_inlines_by_sep(def[1].c)
 
@@ -218,34 +200,26 @@ function DefinitionList(el)
           end
 
           if term[1].text ~= ":" then -- Term has no : in the beginning - compact item
-
             if #term_fields == 1 then
               -- either cvitem or cvitemwithcomment
 
               if first_def_fields and #first_def_fields == 0 then
                 error(loc .. "Definition has no fields for \\cvitem family.")
-
               elseif #first_def_fields == 1 then
-                table.insert(out,  mk_item("cvitem", term_fields, def_fields, i))
-
+                table.insert(out, mk_item("cvitem", term_fields, def_fields, i))
               elseif #first_def_fields == 2 then
-                table.insert(out, mk_item("cvitemwithcomment",  term_fields, def_fields, i))
-
+                table.insert(out, mk_item("cvitemwithcomment", term_fields, def_fields, i))
               elseif #first_def_fields > 2 then
                 loc = stringify(item)
-                error(loc .."\\cvitem family supports a maximum of 2 fields in the definition.")
+                error(loc .. "\\cvitem family supports a maximum of 2 fields in the definition.")
               end
-
             elseif #term_fields > 3 then
               error(loc .. "\\cvitem family supports a maximum of 3 fields in the term.")
-
             elseif #term_fields ~= #first_def_fields then
-              
               error(loc .. "double/triple items must have same number of term fields as definitions fields.")
-
             else -- #term_fields either 2 or 3
               if #first_def_fields == 2 then
-                  table.insert(out, mk_item("cvdoubleitem", term_fields , def_fields, i))
+                table.insert(out, mk_item("cvdoubleitem", term_fields, def_fields, i))
               elseif #first_def_fields == 3 then
                 table.insert(out, mk_item("cvtripleitem", term_fields, def_fields, i))
               end
@@ -253,12 +227,10 @@ function DefinitionList(el)
           else -- Term begins with ":"
             if #def_fields >= 3 then
               error(loc .. "cvlistitems only support 1 or 2 fields in the definition")
-
             elseif #def_fields == 2 then
-              table.insert(out, mk_item("cvlistdoubleitem", term_fields, def_fields, i ))
-
+              table.insert(out, mk_item("cvlistdoubleitem", term_fields, def_fields, i))
             else
-              table.insert(out, mk_item("cvlistitem", term_fields,  def_fields, i))
+              table.insert(out, mk_item("cvlistitem", term_fields, def_fields, i))
             end
           end
         end
@@ -280,7 +252,7 @@ local function merge_defaults(defaults, user_config)
   end
 
   for key, user_value in pairs(user_config) do
-      merged[key] = user_value
+    merged[key] = user_value
   end
 
   return merged
@@ -304,18 +276,17 @@ end
 
 -- Function to handle theme configurations
 local function Theme(meta)
-
   local theme = meta.theme or {}
   sep = stringify(theme.separationsymbol or "|")
   local theme_blocks = {
     -- TODO: support also this alternative definition:
     -- string.format("\\documentclass[%s,%s,%s,%s]{moderncv}",
-     --   stringify(theme.fontsize), stringify(theme.papersize),
-     --   stringify(theme.fontfamily), "colorlinks=true"
+    --   stringify(theme.fontsize), stringify(theme.papersize),
+    --   stringify(theme.fontfamily), "colorlinks=true"
     -- ),
     string.format("\\moderncvcolor{%s}", stringify(theme.moderncvcolor)),
     --cvcolor must be set before style, otherwise it will not be applied to the document
-    string.format("\\moderncvstyle[left,details]{%s}", stringify(theme.moderncvstyle)), 
+    string.format("\\moderncvstyle[left,details]{%s}", stringify(theme.moderncvstyle)),
     --string.format("\\usepackage[scale=%s]{geometry}", stringify(theme.scale)),
     string.format("\\setlength{\\hintscolumnwidth}{%s}", stringify(theme.hintscolumnwidth))
     -- "\\setlength{\\separatorcolumnwidth}{0.05\\textwidth}"
@@ -344,7 +315,7 @@ function Meta(meta)
     local parts = {}
     local patt = '[^' .. sep .. ']+'
     for part in s:gmatch(patt) do
-      parts[#parts+1] = trim(part)
+      parts[#parts + 1] = trim(part)
     end
     return parts
   end
@@ -366,8 +337,8 @@ function Meta(meta)
   local lastname = mstr('lastname')
   if not firstname and not lastname then
     local name = mstr('name')
-    if name then 
-      firstname, lastname = split_name(name) 
+    if name then
+      firstname, lastname = split_name(name)
     else
       local author = mstr('author')
       if author then
@@ -380,7 +351,8 @@ function Meta(meta)
   if firstname or lastname then
     firstname = firstname or ''
     lastname = lastname or ''
-    table.insert(blocks, pandoc.RawBlock('latex', string.format('\\name{%s}{%s}', escape_tex(firstname), escape_tex(lastname))))
+    table.insert(blocks,
+      pandoc.RawBlock('latex', string.format('\\name{%s}{%s}', escape_tex(firstname), escape_tex(lastname))))
   end
 
   -- title
@@ -396,7 +368,9 @@ function Meta(meta)
     local street = parts[1] or ''
     local city = parts[2] or ''
     local country = parts[3] or ''
-    table.insert(blocks, pandoc.RawBlock('latex', string.format('\\address{%s}{%s}{%s}', escape_tex(street), escape_tex(city), escape_tex(country))))
+    table.insert(blocks,
+      pandoc.RawBlock('latex',
+        string.format('\\address{%s}{%s}{%s}', escape_tex(street), escape_tex(city), escape_tex(country))))
   end
 
   -- phones: support either single `phone` or a map `phones`
@@ -432,9 +406,11 @@ function Meta(meta)
       if account and account ~= '' then
         -- if looks like a url, put it as url argument; else as account
         if account:match('^https?://') then
-          table.insert(blocks, pandoc.RawBlock('latex', string.format('\\social[%s]{%s}', escape_tex(k), escape_tex(account))))
+          table.insert(blocks,
+            pandoc.RawBlock('latex', string.format('\\social[%s]{%s}', escape_tex(k), escape_tex(account))))
         else
-          table.insert(blocks, pandoc.RawBlock('latex', string.format('\\social[%s]{%s}', escape_tex(k), escape_tex(account))))
+          table.insert(blocks,
+            pandoc.RawBlock('latex', string.format('\\social[%s]{%s}', escape_tex(k), escape_tex(account))))
         end
       end
     end
@@ -449,7 +425,8 @@ function Meta(meta)
 end
 
 return {
-  { DefinitionList = DefinitionList,
+  {
+    DefinitionList = DefinitionList,
     Meta = Meta,
-    }
+  }
 }
