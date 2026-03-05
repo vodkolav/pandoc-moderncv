@@ -13,7 +13,7 @@
 - make a pandoc-filters and docker package for this project, so that users can easily use it in their own pandoc projects
 - make docx, html templates 
 - clean up, refactor, and document the code
-
+- rename theme to style
 
 # errors 
 

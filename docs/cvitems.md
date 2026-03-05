@@ -137,6 +137,7 @@ More than 2 definition fields raises an error.
 If each definition has a single field, then the DefList maps to `\cvlistitem` as follows:
 
 ```markdown
+|
 : Item 1 
 : Item 2 
 : Item 3
@@ -156,7 +157,7 @@ If each definition has 2 fields, then the DefList maps to `\cvlistdoubleitem` as
 <!-- single term (omitted), multiple definition, 2 fields, no block content -->
 
 ```markdown
-
+|
 : Item 1 | Item 4 
 : Item 2 | Item 5 
 : Item 3 | Item 6 

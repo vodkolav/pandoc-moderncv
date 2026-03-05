@@ -116,7 +116,7 @@ function tack(term_fields,i)
 end
 
 function mk_item(type, term_fields, def_fields, i)
-
+  local macros = ""
   if type == "empty" then
     macros = string.format("\\cvitem{%s}{}", preserve(term_fields[1])) --empty
 
@@ -183,6 +183,8 @@ function DefinitionList(el)
     local term_tex = preserve(term or {})
     local term_fields = split_inlines_by_sep(term)
 
+    local loc = "\nNear " .. stringify(item) .."\n"
+
     if #definitions == 0 then
       -- No definitions, produce \cvitem with an empty description
       table.insert(out, mk_item("empty", term_fields , {}))
@@ -197,7 +199,7 @@ function DefinitionList(el)
         local first_def_blocks = {table.unpack(first_def, 2)}
 
         if #term_fields ~= 1 then
-          error("complex items must have single field in term (no separators)")
+          error(loc .. "complex items must have single field in term (no separators)")
 
         elseif #definitions == 1 then
           -- debug_log("term: " .. repr(term))
@@ -208,7 +210,7 @@ function DefinitionList(el)
           local desc = pandoc.write(pandoc.Pandoc(first_def_blocks), 'latex')
           local fields = split_inlines_by_sep(first_def[1].c)
           if #fields > 4 then
-            error("\\cventry supports a maximum of 4 fields in the definition.")
+            error(loc .. "\\cventry supports a maximum of 4 fields in the definition.")
           end
           -- only one definition; Block content exists; no more than 4 fields - use \cventry
           desc = desc:gsub("\n\n", "\n")
@@ -233,19 +235,19 @@ function DefinitionList(el)
           local def_fields = split_inlines_by_sep(def[1].c)
 
           if #def_fields ~= #first_def_fields then
-            error("Invalid structure: all definitions must have same number of fields.")
+            error(loc .. "Invalid structure: all definitions must have same number of fields.")
           end
 
           -- debug_log("term[1].text: " .. repr(term[1].text))
           -- debug_log("term[1].text == \":\" " .. repr(term[1].text == ":"))
           
-          if term[1].text ~= ":" then -- Term has no : in the beginning - regular item
+          if term[1].text ~= ":" then -- Term has no : in the beginning - compact item
 
             if #term_fields == 1 then
               -- either cvitem or cvitemwithcomment
 
               if first_def_fields and #first_def_fields == 0 then
-                error("Definition has no fields for \\cvitem family.")
+                error(loc .. "Definition has no fields for \\cvitem family.")
 
               elseif #first_def_fields == 1 then
                 table.insert(out,  mk_item("cvitem", term_fields, def_fields, i))
@@ -257,14 +259,14 @@ function DefinitionList(el)
                 -- debug_log("\\cvitem family supports a maximum of 2 fields in the definition.")
                 -- debug_log("fields: " .. repr(first_def_fields))
                 loc = stringify(item)
-                error("Near " .. loc .."\n \\cvitem family supports a maximum of 2 fields in the definition.")
+                error(loc .."\\cvitem family supports a maximum of 2 fields in the definition.")
               end
 
             elseif #term_fields > 3 then
-              error("\\cvitem family supports a maximum of 3 fields in the term.")
+              error(loc .. "\\cvitem family supports a maximum of 3 fields in the term.")
 
             elseif #term_fields ~= #first_def_fields then
-              loc = "\nNear " .. stringify(item) .."\n"
+              
               error(loc .. "double/triple items must have same number of term fields as definitions fields.")
 
             else -- #term_fields either 2 or 3
@@ -276,7 +278,7 @@ function DefinitionList(el)
                 table.insert(out, mk_item("cvtripleitem", term_fields, def_fields, i))
               end
             end
-        else -- Term begins with ":"
+          else -- Term begins with ":"
 
           -- debug_log("item: " .. repr(item))
           -- debug_log("term: " .. repr(term))
@@ -517,7 +519,7 @@ end
 return {
   { DefinitionList = DefinitionList,
     Meta = Meta,
-    Inline = Inline,
-    Block = Block
+    -- Inline = Inline,
+    -- Block = Block
     }
 }

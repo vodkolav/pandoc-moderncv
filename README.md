@@ -31,7 +31,7 @@ The content of the markdown file must be structured in a specific way for the fi
 Personal info and theme configuration go in the YAML frontmatter. 
 
 ### Basic personal info 
-These populate CV header with the personal info.
+These populate CV header with the personal info. All except name are optional. 
 - `name`: Your full name. Can also use `firstname` and `lastname`.
 - `title`: The title of the document (e.g., "Curriculum Vitae" or "Business Analyst").
 - `address`: Your mailing address.
@@ -53,8 +53,8 @@ You only need specify options you want to change; sensible defaults are used oth
 - `fontfamily`: Font family for the document (e.g., `sans`, `roman`).
 - `moderncvstyle`: Style of the `moderncv` class (e.g., `classic`, `banking`, `casual`,  `oldstyle`, `fancy`, `contemporary`).
 - `moderncvcolor`: Color scheme for the `moderncv` class (e.g., `blue`, `green`, `red`).
-- `scale`: Scale factor for the hints column width (e.g., `0.8`, `0.93`).
-
+- `scale`: Scale factor for the  (e.g., `0.8`, `0.93`).
+- `hintscolumnwidth`: width of the left column for terms (e.g., `2cm`, `3cm`, etc)
 
 Example minimal Frontmatter:
 
@@ -84,13 +84,26 @@ The CV is separated into sections (such as `# Experience`, `# Education`, etc.) 
 ## CV items 
 
 The main content of your resume is created using [Extended Markdown definition lists](#appendix-understanding-definition-lists) under section headings. The structure of the definition list determines how the content is rendered in the final PDF. \
-The syntax is designed with the intent that the visual structure you want in the PDF should be roughly mirrored by the structure of the definition list in Markdown.
+The syntax is designed with the intent that the visual structure you want in the PDF should be roughly mirrored by the structure of the definition list in Markdown.  
+Inline **formatting** is *preserved* in terms, definitions and the block content.
 
-## Examples 
 Below are minimal examples for each implemented entry type; markdown on top, resulting Rendered PDF block below. 
 
-### Simple (one-line)
-Term + single definition, no block content = compact item (one-line output).
+## Compact items 
+
+A collection of `category - content(s)` items spread across one, two or three columns. 
+
+- Compact items have no block content. 
+- Number of fields must be the same among all definitions in an item.
+- Compact items can have multiple definitions per term. They will appear as multiple contents under single category.
+- If you need each content to be under it's own category, just create multiple items. 
+
+There are several types of compact items:
+
+### Item
+Single term field, single definition field
+
+* A simple item 
 
 ```markdown
 # Interests
@@ -100,27 +113,41 @@ hobby 1
 
 hobby 2
 : Description 2
+
+hobby 3
+: Description 30
+: Description 31
 ```
 
 ![Rendered PDF](docs/assets/1.png)
 
-
 ### Item with comment
-Term + single definition with 2 fields, no block content = compact item (one-line + comment on the right) output
+Single term field, 2 definition fields  
+
+* The comment is aligned to the right of the page
 
 ```markdown
 # Languages
 
 English
 : Fluent | learned in school
+
+Language 2 
+: Skill level | Comment
+
+Language 3
+: Writing | Expert
+: Speaking | Basic 
 ```
 
 ![Rendered PDF](docs/assets/2.png)
 
-### Double / Triple items
-Term with `n` (either 2 or 3) fields + single definition with `n` fields, no block content = multi-column single-line item. `n` determines whether it's a double or triple item. \
-If you need more lines, repeat the item. 
-It is recommended not to mix double/triple items within the same section, as it will lead to inconsistent formatting.
+### Double / Triple item
+
+Term with `n` (either 2 or 3) fields + definition(s) with `n` fields,  
+`n` determines whether it's a double or triple item. \
+
+* It is recommended not to mix double/triple items within the same section, as it will lead to inconsistent formatting (as shown below).
 
 ```markdown
 # Computer Skills
@@ -128,31 +155,41 @@ It is recommended not to mix double/triple items within the same section, as it 
 Programming | Tools
 : Python, C++ | Git, Docker
 
+category 3 | category 6
+: XXX | YYY
+: ZZZ | TTT
+: WWW | UwU
+
 Left | Center | Right
 : A | B | C
+: D | E | F
 ```
 
 ![Rendered PDF](docs/assets/3.png)
 
-### List items
-Single term + multiple definitions = list-style items 
+### List item
+Single empty term + multiple definitions. 
 
-The Term itself is omitted from output, only the definitions are rendered as items in a list.
+* Empty term means it must be just a single pipe char. It is omitted from output, only the definitions are rendered as the list.
 
 ```markdown
 # Hobbies
-my hobbies
+
+|
 : Skiing
 : Cooking
 : Photography
 ```
 ![Rendered PDF](docs/assets/4.png)
 
-2 fields in **All** definitions = double-column list-style items
+### Double-column list item
+
+Single empty term + 2 fields in **All** definitions  
 
 ```markdown
 # Hobbies
-double list 
+
+|
 : Item A | Item D
 : Item B | Item E
 : Item C | Item F
@@ -161,14 +198,16 @@ double list
 ![Rendered PDF](docs/assets/5.png)
 
 
-### Detailed entry (job / project / education)
-Single Term + single definition with up to 4 fields, with indented block content = detailed item (job/project with description and bullets).
+## Detailed entry (job / project / education)
+Single Term + **single** definition with **up to 4** fields and an **indented** block content.  
+
+* Used for job/project/education with rich description 
 
 ```markdown
 # Experience
 
-Senior Engineer
-: 2018--2024 | Acme Corp | Remote
+2018--2024
+: Senior Engineer | Acme Corp | Remote
 
     Led platform team.
     - Built APIs
@@ -177,10 +216,13 @@ Senior Engineer
 
 ![Rendered PDF](docs/assets/6.png)
 
-### Columns (multiple named columns)
-Single Term + multiple definitions, each with block content = column layout (multiple named columns).\
-Like in lists, the Term is omitted from output, only the definitions are rendered as columns. \
-The number of definitions determines the number of columns. The content of each definition is rendered within the corresponding column, and block content formatting is preserved.
+## Columns (multiple named columns)
+Single Term + **multiple** definitions, **each with an indented** block content 
+
+Rich content spread across multiple named columns.  
+The Term is omitted from output, only the definitions are rendered as columns.  
+The number of definitions determines the number of columns.  
+The content of each definition is rendered within the corresponding column, and block content formatting is preserved.
 
 ```markdown
 # References
@@ -207,7 +249,7 @@ That's the minimal quickstart. For full details, examples and edge cases see the
 
 
 
-## Appendix: Understanding Definition Lists 
+# Appendix: Understanding Definition Lists 
 
 ### Basic Structure
 
