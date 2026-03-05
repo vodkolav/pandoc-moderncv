@@ -45,18 +45,12 @@ local sep = "|"
 
 local function split_inlines_by_sep(inlines)
   local groups, current = {}, {}
-  --debug_log("sep in split_inlines_by_sep: " .. repr(sep))
   for b, el in ipairs(inlines) do
     if el.t == 'Str' and  el.text == sep then
-      -- if type(el) == 'userdata' then
-      --   elc = el.c or 'nul'
-      --   debug_log("el: " .. attrs(el) .. " el.c:" .. elc .. " type(el.c):" .. type(el.c) .. " el.t: " .. el.t)
-      -- end
+
         table.insert(groups, current)
         current = {}
-      -- else
-      --   table.insert(current, el)
-      --end
+
     else
       table.insert(current, el)
     end
@@ -67,9 +61,9 @@ end
 
 
 function preserve(field)
+  --preserves the inline formatting of the blocks
   return pandoc.write(pandoc.Pandoc({pandoc.Plain(field)}), 'latex')
 end
-
 
 
 -- Ensure pandoc global is defined
@@ -79,26 +73,18 @@ end
 
 
 function make_cvcolumns(term_fields, definitions)
---  local items = {}
   local columns = {}
-  
-  --local term_fields = split_inlines_by_sep(term)
+
   for i, def in ipairs(definitions) do
-    --debug_log("term " .. i ..  repr(term[i]))
     local def_fields = def[1].c
 
     local def_blocks = {table.unpack(def, 2)}
 
-    -- debug_log("def_block: " .. repr(def_blocks))
-
     local desc = pandoc.write(pandoc.Pandoc(def_blocks), 'latex')
-
-    -- debug_log("desc: " .. repr(desc))
 
     table.insert(columns, string.format("\\cvcolumn{%s}{%s}",
                   preserve(def_fields or ''), 
                   desc or ''))
-                  --  pandoc.write(pandoc.Pandoc(def_block[1]), 'latex')))
   end
 
   return pandoc.RawBlock('latex', string.format(
@@ -108,8 +94,8 @@ function make_cvcolumns(term_fields, definitions)
 end
 
 function tack(term_fields,i)
+  -- make term_fields empty for definitions above first
   if i ~= 1 then
-    -- 
     term_fields = {{""},{""},{""}}
   end
   return term_fields
@@ -118,11 +104,10 @@ end
 function mk_item(type, term_fields, def_fields, i)
   local macros = ""
   if type == "empty" then
-    macros = string.format("\\cvitem{%s}{}", preserve(term_fields[1])) --empty
+    macros = string.format("\\cvitem{%s}{}", preserve(term_fields[1]))
 
   elseif type == "cvitem" then
     term_fields = tack(term_fields,i)
-    -- debug_log("term_fields:  " .. repr(term_fields))
     macros = string.format("\\cvitem{%s}{%s}", 
                             preserve(term_fields[1]), preserve(def_fields[1]))
 
@@ -133,7 +118,6 @@ function mk_item(type, term_fields, def_fields, i)
 
   elseif type == "cvdoubleitem" then
     term_fields = tack(term_fields,i)
-    debug_log("i, term_fields: " .. i .. " " .. repr(term_fields))
 
     macros = string.format("\\cvdoubleitem{%s}{%s}{%s}{%s}",
                            preserve(term_fields[1]), preserve(def_fields[1]),
@@ -176,7 +160,6 @@ end
 
 function DefinitionList(el)
   local out = {}
-  --debug_log("el:  " .. repr(el))
   for _, item in ipairs(el.c or {}) do
 
     local term, definitions = item[1], item[2]
@@ -202,10 +185,6 @@ function DefinitionList(el)
           error(loc .. "complex items must have single field in term (no separators)")
 
         elseif #definitions == 1 then
-          -- debug_log("term: " .. repr(term))
-          -- debug_log("first_def: " .. repr(first_def))
-          -- debug_log("first_def_fields: " .. repr(first_def_fields))
-          -- debug_log("first_def_blocks: " .. repr(first_def_blocks))
 
           local desc = pandoc.write(pandoc.Pandoc(first_def_blocks), 'latex')
           local fields = split_inlines_by_sep(first_def[1].c)
@@ -238,9 +217,6 @@ function DefinitionList(el)
             error(loc .. "Invalid structure: all definitions must have same number of fields.")
           end
 
-          -- debug_log("term[1].text: " .. repr(term[1].text))
-          -- debug_log("term[1].text == \":\" " .. repr(term[1].text == ":"))
-          
           if term[1].text ~= ":" then -- Term has no : in the beginning - compact item
 
             if #term_fields == 1 then
@@ -256,8 +232,6 @@ function DefinitionList(el)
                 table.insert(out, mk_item("cvitemwithcomment",  term_fields, def_fields, i))
 
               elseif #first_def_fields > 2 then
-                -- debug_log("\\cvitem family supports a maximum of 2 fields in the definition.")
-                -- debug_log("fields: " .. repr(first_def_fields))
                 loc = stringify(item)
                 error(loc .."\\cvitem family supports a maximum of 2 fields in the definition.")
               end
@@ -271,43 +245,21 @@ function DefinitionList(el)
 
             else -- #term_fields either 2 or 3
               if #first_def_fields == 2 then
-                  --term_fields = split_inlines_by_sep(term[1].c)
                   table.insert(out, mk_item("cvdoubleitem", term_fields , def_fields, i))
               elseif #first_def_fields == 3 then
-                -- debug_log("item: " .. repr(item))
                 table.insert(out, mk_item("cvtripleitem", term_fields, def_fields, i))
               end
             end
           else -- Term begins with ":"
+            if #def_fields >= 3 then
+              error(loc .. "cvlistitems only support 1 or 2 fields in the definition")
 
-          -- debug_log("item: " .. repr(item))
-          -- debug_log("term: " .. repr(term))
-          -- debug_log("term.c: " .. repr(term.c))
-          -- debug_log("definitions: " .. repr(definitions))
-          -- def1 = definitions[1]
-          -- debug_log("def[1]: " .. repr(def1.c))
-          -- local fields = split_inlines_by_sep(definitions[1])
-          -- debug_log("fields1: " .. repr(fields[1]))
-          -- debug_log("term_tex: " .. repr(term_tex))
-          -- debug_log("term_tex.c: " .. repr(term_tex.c))
-            -- Term.#fields matches #definitions - Complex Items...
-
-          -- debug_log("#def_fields: " .. repr(#def_fields))
-          -- debug_log("#first_def_fields: " .. repr(#first_def_fields))
-            if #def_fields == 2 then
-              -- debug_log('were in cvlistdoubleitem')
+            elseif #def_fields == 2 then
               table.insert(out, mk_item("cvlistdoubleitem", term_fields, def_fields, i ))
-            else
-              -- debug_log('were in cvlistitem')
 
+            else
               table.insert(out, mk_item("cvlistitem", term_fields,  def_fields, i))
             end
-
-            -- #definitions > 3
-            -- debug_log("definitions: " .. repr(definitions))
-            -- debug_log("term: " .. repr(term))
-            -- debug_log("def_fields: " .. repr(def_fields))
-            -- debug_log("first_def_fields: " .. repr(first_def_fields))
           end
         end
       end
@@ -316,12 +268,8 @@ function DefinitionList(el)
   return out
 end
 
-
-
 -- Function to recursively merge user config with defaults
 local function merge_defaults(defaults, user_config)
-  --debug_log("user_config: " .. repr(user_config))
-  --debug_log("defaults: " .. repr(defaults))
   if type(user_config) ~= "table" then
     return user_config or defaults
   end
@@ -330,12 +278,9 @@ local function merge_defaults(defaults, user_config)
   for key, default_value in pairs(defaults) do
     merged[key] = merge_defaults(default_value, user_config[key])
   end
-  --debug_log("merged: " .. repr(merged))
 
   for key, user_value in pairs(user_config) do
-    -- if merged[key] == nil then
       merged[key] = user_value
-    -- end
   end
 
   return merged
@@ -353,7 +298,6 @@ local function load_default_theme()
 
   -- Parse the YAML content into a Pandoc AST
   local parsed = pandoc.read(content, "markdown").meta
-  --debug_log("parsed: " .. repr(parsed))
   return parsed
 end
 
@@ -363,8 +307,8 @@ local function Theme(meta)
 
   local theme = meta.theme or {}
   sep = stringify(theme.separationsymbol or "|")
-  -- debug_log("meta: " .. repr(meta))
   local theme_blocks = {
+    -- TODO: support also this alternative definition:
     -- string.format("\\documentclass[%s,%s,%s,%s]{moderncv}",
      --   stringify(theme.fontsize), stringify(theme.papersize),
      --   stringify(theme.fontfamily), "colorlinks=true"
@@ -380,7 +324,6 @@ local function Theme(meta)
 end
 
 function Meta(meta)
-  debug_log("\nnew run =========================================")
   local blocks = {}
 
   local function mstr(key)
@@ -400,34 +343,23 @@ function Meta(meta)
     if not s then return {} end
     local parts = {}
     local patt = '[^' .. sep .. ']+'
-    -- debug_log("Splitting address: " .. s .. " with pattern: " .. sep)
     for part in s:gmatch(patt) do
       parts[#parts+1] = trim(part)
     end
     return parts
   end
 
-    -- Process theme configurations
-  -- if meta.theme then
-
-  -- debug_log("meta: " .. stringify(meta))
-  -- debug_log("meta.theme: " .. stringify(meta.theme))
-
-    -- Load default theme configuration
+  -- Process theme configurations
+  -- Load default theme configuration
   local defaults = load_default_theme()
-  --debug_log("defaults_loaded: " .. repr(defaults))
 
   -- Merge user-provided theme with defaults
-  --local user_theme = meta.theme or {}
-  --debug_log("user_theme: " .. repr(user_theme))
-
   meta = merge_defaults(defaults, meta)
 
   local theme_blocks = Theme(meta)
   for _, block in ipairs(theme_blocks) do
     table.insert(blocks, pandoc.RawBlock('latex', block))
   end
--- end
 
   -- name: prefer explicit firstname/lastname, else split `name` or `author`
   local firstname = mstr('firstname')
@@ -519,7 +451,5 @@ end
 return {
   { DefinitionList = DefinitionList,
     Meta = Meta,
-    -- Inline = Inline,
-    -- Block = Block
     }
 }
